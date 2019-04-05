@@ -1,0 +1,6 @@
+.*cache
+.idea
+*.ipynb
+.ipynb_checkpoints
+*.egg-info
+*.pyc
