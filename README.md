@@ -1,5 +1,14 @@
 # The World Bank Data in Python
 
+[![Build Status](https://travis-ci.com/mwouts/world_bank_data.svg?branch=master)](https://travis-ci.com/mwouts/world_bank_data)
+[![codecov.io](https://codecov.io/github/mwouts/world_bank_data/coverage.svg?branch=master)](https://codecov.io/github/mwouts/world_bank_data?branch=master)
+[![Language grade: Python](https://img.shields.io/badge/lgtm-A+-brightgreen.svg)](https://lgtm.com/projects/g/mwouts/world_bank_data/context:python)
+[![Jupyter Notebook](https://img.shields.io/badge/Binder-Notebook-blue.svg)](
+    https://mybinder.org/v2/gh/mwouts/world_bank_data/master?filepath=examples%2FA%20sunburst%20plot%20of%20the%20world%20population.ipynb)
+[![JupyterLab](https://img.shields.io/badge/Binder-JupyterLab-blue.svg)](
+    https://mybinder.org/v2/gh/mwouts/world_bank_data/master?urlpath=lab)
+
+
 This is an implementation of the [World Bank API v2](https://datahelpdesk.worldbank.org/knowledgebase/articles/889386-developer-information-overview) in Python.
 
 # Install
@@ -82,7 +91,7 @@ wb.get_series('SP.POP.TOTL', date='2016', id_or_value='id', simplify_index=True)
 
 ## Ready for an interative tutorial?
 
-Go to our Binder and run either this [README](), or our other [tutorial] on how to produce this plot of the World Population:
+Go to our Binder and run either this [README](https://mybinder.org/v2/gh/mwouts/world_bank_data/master?filepath=README.md), or our other [tutorial](https://mybinder.org/v2/gh/mwouts/world_bank_data/master?filepath=examples%2FA%20sunburst%20plot%20of%20the%20world%20population.ipynb) on how to produce this plot of the World Population:
 
 ![World Population 2017](https://gist.githubusercontent.com/mwouts/ec3a88f1d97e36a062f69d4072b91e39/raw/b0d4a76e185cac48d4253df8792cac4b91e746f2/world_population.png)
 
