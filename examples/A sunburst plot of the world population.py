@@ -38,15 +38,15 @@ with mock.patch('plotly.offline.offline.get_plotlyjs', plotly_latest):
 
 # Country and associated regions
 import world_bank_data as wb
-countries = wb.countries()
+countries = wb.get_countries()
 countries
 
 # Population dataset, by the World Bank (most recent value)
-population = wb.indicator('SP.POP.TOTL', mrv=1)
+population = wb.get_series('SP.POP.TOTL', mrv=1)
 population
 
 # Same data set, indexed with the country code
-population = wb.indicator('SP.POP.TOTL', labels=False, mrv=1)
+population = wb.get_series('SP.POP.TOTL', labels=False, mrv=1)
 population.index = population.index.droplevel('series').droplevel('year')
 population
 

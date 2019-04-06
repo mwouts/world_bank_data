@@ -1,28 +1,32 @@
+"""Get country information"""
+
 import pandas as pd
-from .request import wb_get, collapse
+from .request import wb_get, extract_preferred_field
+from .options import default_field, default_language
 
 
-def countries(country_list=None, info='value', **params):
+def get_countries(country=None, language=default_language, field=default_field, **params):
     """Return a DataFrame that describes one, multiple or all countries, indexed by the country id.
-    :param country_list: None (all countries), the id of a country, or a list of multiple ids
-    :param info: Chose either 'id', 'iso2code' or 'value' for columns 'incomeLevel' and 'lendingType'"""
+    :param country: None (all countries), the id of a country, or a list of multiple ids
+    :param language: Desired language
+    :param field: Chose either 'id', 'iso2code' or 'value' for columns 'incomeLevel' and 'lendingType'"""
 
     expected = ['id', 'iso2code', 'value']
-    if info not in expected:
-        raise ValueError("'info' should be one of '{}'".format("', '".join(expected)))
+    if field not in expected:
+        raise ValueError("'field' should be one of '{}'".format("', '".join(expected)))
 
-    country_data = wb_get('country', country_list, **params)
+    data = wb_get('country', country, language=language, **params)
 
     # We get a list (countries) of dictionary (properties)
-    columns = country_data[0].keys()
-    df = {}
+    columns = data[0].keys()
+    table = {}
 
     for col in columns:
-        df[col] = [cnt[col][info] if isinstance(cnt[col], dict) else cnt[col] for cnt in country_data]
+        table[col] = [extract_preferred_field(cnt[col], field) for cnt in data]
 
-    df = pd.DataFrame(df, columns=columns).set_index('id')
+    table = pd.DataFrame(table, columns=columns).set_index('id')
 
     for col in ['latitude', 'longitude']:
-        df[col] = pd.to_numeric(df[col])
+        table[col] = pd.to_numeric(table[col])
 
-    return df
+    return table
