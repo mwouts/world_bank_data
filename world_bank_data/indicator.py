@@ -53,9 +53,15 @@ def get_series(indicator, country=None, id_or_value=None, simplify_index=False, 
         index = [dim for dim in index if len(dim) != 1]
 
     if len(index) > 1:
+        # Our series is indexed by a multi-index
         index = pd.MultiIndex.from_product(index, names=[dim.name for dim in index])
-    else:
+    elif len(index) == 1:
+        # A simple index is enough
         index = index[0]
+    else:
+        # Index has dimension zero. Data should be a scalar
+        assert len(value) == 1, 'Data has no dimension and was expected to be a scalar'
+        return value[0]
 
     return pd.Series(value, index=index, name=indicator)
 

@@ -1,4 +1,5 @@
 import pytest
+import numbers
 from world_bank_data import get_indicators, get_series
 from .tools import assert_numeric_or_string
 
@@ -42,6 +43,11 @@ def test_indicator_use_id():
     assert_numeric_or_string(idx)
     assert idx.name == 'SP.POP.TOTL'
     assert idx.index.names == ['Country']
+
+
+def test_indicator_simplify_scalar():
+    pop = get_series('SP.POP.TOTL', 'CHN', mrv=1, simplify_index=True)
+    assert isinstance(pop, numbers.Number)
 
 
 def test_indicator_date():
