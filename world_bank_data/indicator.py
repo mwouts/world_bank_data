@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from .request import wb_get, extract_preferred_field
+from .request import wb_get, wb_get_table
 from .options import default_field, default_language
 
 
@@ -15,29 +15,15 @@ def get_indicators(indicator=None, language=default_language, field=default_fiel
     if field == 'iso2code':
         field = 'id'
 
-    expected = ['id', 'value']
-    if field not in expected:
-        raise ValueError("'field' should be one of '{}'".format("', '".join(expected)))
-
-    data = wb_get('indicator', indicator, language=language, **params)
-    if not data:
-        raise RuntimeError('The request returned no data')
-
-    # We get a list (indicators) of dictionary (properties)
-    columns = data[0].keys()
-    table = {}
-
-    for col in columns:
-        table[col] = [extract_preferred_field(idx[col], field) for idx in data]
-
-    return pd.DataFrame(table, columns=columns).set_index('id')
+    return wb_get_table('indicator', indicator, language=language, field=field, expected=['id', 'value'], **params)
 
 
-def get_series(indicator, country_list=None, labels=True, **params):
+def get_series(indicator, country_list=None, field='value', drop_constant_index=False, **params):
     """Return a Series with the indicator data.
     :param indicator: Indicator code (see indicators())
     :param country_list: None (all countries), the id of a country, or a list of multiple ids
-    :param labels: Use labels rather than codes in the index
+    :param field: Choose between 'value' and 'id' for the index
+    :param drop_constant_index: Drop indexes when they take a single value
     :param params: Additional parameters for the World Bank API, like date or mrv"""
 
     idx = wb_get('country', country_list, 'indicator', indicator, data_format='jsonstat', **params)
@@ -46,11 +32,15 @@ def get_series(indicator, country_list=None, labels=True, **params):
     dimension = idx.pop('dimension')
     value = idx.pop('value')
 
-    index = pd.MultiIndex.from_product(
-        [_parse_category(dimension[dim], labels) for dim in dimension['id']],
-        names=dimension['id'])
+    index = [_parse_category(dimension[dim], field == 'value') for dim in dimension['id']]
+    if field != 'value':
+        for idx, name in zip(index, dimension['id']):
+            idx.name = name
 
-    return pd.Series(value, index=index, name=indicator)
+    if drop_constant_index:
+        index = [dim for dim in index if len(dim) != 1]
+
+    return pd.Series(value, index=pd.MultiIndex.from_product(index, names=[dim.name for dim in index]), name=indicator)
 
 
 def _parse_category(cat, use_labels):
