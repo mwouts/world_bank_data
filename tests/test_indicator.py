@@ -34,3 +34,16 @@ def test_indicator_most_recent_value():
     idx_mrv5 = get_series('SP.POP.TOTL', mrv=5)
     assert len(idx_mrv5.index) == 5 * len(idx.index)
     assert_numeric_or_string(idx_mrv5)
+
+
+def test_indicator_date():
+    idx = get_series('SP.POP.TOTL', date='2010:2018')
+    assert len(idx.index) > 200 * 8
+    assert_numeric_or_string(idx)
+
+
+@pytest.mark.skip('jsonstat format not supported here')
+def test_indicator_monthly():
+    idx = get_series('DPANUSSPB', country=['CHN', 'BRA'], date='2012M01:2012M08')
+    assert len(idx.index) > 200 * 12
+    assert_numeric_or_string(idx)

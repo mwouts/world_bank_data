@@ -21,8 +21,9 @@ def get_countries(country=None, language=None, id_or_value=None, **params):
     return table
 
 
-def search_countries(pattern, language=None):
+def search_countries(pattern, language=None, **kwargs):
     """Search for the given pattern in the list of countries
     :param pattern: a string or a regular expression
-    :param language: Desired language"""
-    return search(get_countries(language=language), pattern)
+    :param language: Desired language
+    :param kwargs: additional arguments for get_countries"""
+    return search(get_countries(language=language, **kwargs), pattern)

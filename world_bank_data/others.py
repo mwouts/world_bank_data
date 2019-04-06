@@ -11,9 +11,9 @@ def get_regions(region=None, language=None, **params):
     return wb_get_table('region', region, language, **params)
 
 
-def search_regions(pattern, language=None):
+def search_regions(pattern, language=None, **kwargs):
     """Return the regions that match the given pattern"""
-    return search(get_regions(language=language), pattern)
+    return search(get_regions(language=language, **kwargs), pattern)
 
 
 def get_sources(source=None, language=None, **params):
@@ -23,9 +23,9 @@ def get_sources(source=None, language=None, **params):
     return wb_get_table('source', source, language, **params)
 
 
-def search_sources(pattern, language=None):
+def search_sources(pattern, language=None, **kwargs):
     """Return the sources that match the given pattern"""
-    return search(get_sources(language=language), pattern)
+    return search(get_sources(language=language, **kwargs), pattern)
 
 
 def get_topics(topic=None, language=None, **params):
@@ -35,9 +35,9 @@ def get_topics(topic=None, language=None, **params):
     return wb_get_table('topic', topic, language, **params)
 
 
-def search_topics(pattern, language=None):
+def search_topics(pattern, language=None, **kwargs):
     """Return the topics that match the given pattern"""
-    return search(get_topics(language=language), pattern)
+    return search(get_topics(language=language, **kwargs), pattern)
 
 
 def get_incomelevels(incomelevel=None, language=None, **params):

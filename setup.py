@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     install_requires=['pandas', 'requests'],
     license='MIT',
-    classifiers=('Development Status :: 2 - Pre-Alpha',
+    classifiers=('Development Status :: 3 - Alpha',
                  'License :: OSI Approved :: MIT License',
                  'Environment :: Console',
                  'Framework :: Jupyter',

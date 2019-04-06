@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from .request import wb_get, wb_get_table
 from .search import search
+import world_bank_data.options as options
 
 
 def get_indicators(indicator=None, language=None, id_or_value=None, **params):
@@ -19,20 +20,23 @@ def get_indicators(indicator=None, language=None, id_or_value=None, **params):
                         **params)
 
 
-def search_indicators(pattern, language=None):
+def search_indicators(pattern, language=None, **kwargs):
     """Search the indicators that match the given pattern
     :param pattern: a string or a regular expression
-    :param language: the desired language"""
-    return search(get_indicators(language=language), pattern)
+    :param language: the desired language
+    :param kwargs: additional arguments for get_indicators"""
+    return search(get_indicators(language=language, **kwargs), pattern)
 
 
-def get_series(indicator, country=None, use_labels=True, simplify_index=False, **params):
+def get_series(indicator, country=None, id_or_value=None, simplify_index=False, **params):
     """Return a Series with the indicator data.
     :param indicator: Indicator code (see indicators())
     :param country: None (all countries), the id of a country, or a list of multiple country codes
-    :param use_labels: Should the index use codes or labels?
+    :param id_or_value: Should the index have codes or labels?
     :param simplify_index: Drop index levels that have a single value
     :param params: Additional parameters for the World Bank API, like date or mrv"""
+
+    id_or_value = id_or_value or options.id_or_value
 
     idx = wb_get('country', country, 'indicator', indicator, data_format='jsonstat', **params)
     idx = idx['WDI']
@@ -40,8 +44,8 @@ def get_series(indicator, country=None, use_labels=True, simplify_index=False, *
     dimension = idx.pop('dimension')
     value = idx.pop('value')
 
-    index = [_parse_category(dimension[dim], use_labels) for dim in dimension['id']]
-    if not use_labels:
+    index = [_parse_category(dimension[dim], id_or_value == 'value') for dim in dimension['id']]
+    if not id_or_value:
         for idx, name in zip(index, dimension['id']):
             idx.name = name
 
