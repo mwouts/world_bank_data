@@ -36,6 +36,14 @@ def test_indicator_most_recent_value():
     assert_numeric_or_string(idx_mrv5)
 
 
+def test_indicator_use_id():
+    idx = get_series('SP.POP.TOTL', mrv=1, id_or_value='id', simplify_index=True)
+    assert len(idx.index) > 200
+    assert_numeric_or_string(idx)
+    assert idx.name == 'SP.POP.TOTL'
+    assert idx.index.names == ['Country']
+
+
 def test_indicator_date():
     idx = get_series('SP.POP.TOTL', date='2010:2018')
     assert len(idx.index) > 200 * 8
