@@ -11,7 +11,6 @@ jupyter contrib nbextension install --user
 jupyter nbextension enable toc2/main
 
 # 2. Jupytext
-jupyter serverextension install jupytext
 jupyter serverextension enable jupytext
 jupyter nbextension install --py jupytext
 jupyter nbextension enable --py jupytext
