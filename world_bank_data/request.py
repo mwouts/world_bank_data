@@ -3,6 +3,7 @@ from copy import copy
 from requests import get, HTTPError
 import pandas as pd
 from cachetools import cached, TTLCache
+import world_bank_data.options as options
 
 WORLD_BANK_URL = 'http://api.worldbank.org/v2'
 
@@ -97,7 +98,9 @@ def wb_get_table(name, only=None, language=None, field=None, expected=None, **pa
     if isinstance(only, list):
         only = ';'.join(only)
 
+    field = field or options.field
+
     if expected and field not in expected:
         raise ValueError("'field' should be one of '{}'".format("', '".join(expected)))
 
-    return _wb_get_table_cached(name, only, language, field, **params)
+    return _wb_get_table_cached(name, only, language or options.language, field, **params)

@@ -3,10 +3,10 @@
 import numpy as np
 import pandas as pd
 from .request import wb_get, wb_get_table
-from .options import default_field, default_language
+from .search import search
 
 
-def get_indicators(indicator=None, language=default_language, field=default_field, **params):
+def get_indicators(indicator=None, language=None, field=None, **params):
     """Return a DataFrame that describes one, multiple or all indicators, indexed by the indicator id.
     :param indicator: None (all indicators), the id of an indicator, or a list of multiple ids
     :param language: Desired language
@@ -16,6 +16,13 @@ def get_indicators(indicator=None, language=default_language, field=default_fiel
         field = 'id'
 
     return wb_get_table('indicator', indicator, language=language, field=field, expected=['id', 'value'], **params)
+
+
+def search_indicators(pattern, language=None):
+    """Search the indicators that match the given pattern
+    :param pattern: a string or a regular expression
+    :param language: the desired language"""
+    return search(get_indicators(language=language), pattern)
 
 
 def get_series(indicator, country_list=None, field='value', drop_constant_index=False, **params):
