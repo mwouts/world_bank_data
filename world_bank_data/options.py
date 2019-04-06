@@ -1,4 +1,4 @@
 """Global options"""
 
 language = 'en'
-field = 'value'
+id_or_value = 'value'

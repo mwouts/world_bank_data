@@ -46,8 +46,7 @@ population = wb.get_series('SP.POP.TOTL', mrv=1)
 population
 
 # Same data set, indexed with the country code
-population = wb.get_series('SP.POP.TOTL', labels=False, mrv=1)
-population.index = population.index.droplevel('series').droplevel('year')
+population = wb.get_series('SP.POP.TOTL', use_labels=False, simplify_index=True, mrv=1)
 population
 
 # Aggregate region, country and population

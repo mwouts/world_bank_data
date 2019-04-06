@@ -38,14 +38,14 @@ def test_all_countries():
 
 
 def test_one_countries_id():
-    cnt = get_countries(['FRA'], field='id')
+    cnt = get_countries(['FRA'], id_or_value='id')
     assert cnt.index == ['FRA']
     assert cnt.lendingType.values[0] == 'LNX'
     assert_numeric_or_string(cnt)
 
 
 def test_one_countries_iso():
-    cnt = get_countries(['FRA'], field='iso2code')
+    cnt = get_countries(['FRA'], id_or_value='iso2code')
     assert cnt.index == ['FRA']
     assert cnt.lendingType.values[0] == 'XX'
     assert_numeric_or_string(cnt)

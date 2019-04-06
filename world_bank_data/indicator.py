@@ -6,16 +6,17 @@ from .request import wb_get, wb_get_table
 from .search import search
 
 
-def get_indicators(indicator=None, language=None, field=None, **params):
+def get_indicators(indicator=None, language=None, id_or_value=None, **params):
     """Return a DataFrame that describes one, multiple or all indicators, indexed by the indicator id.
     :param indicator: None (all indicators), the id of an indicator, or a list of multiple ids
     :param language: Desired language
-    :param field: Chose either 'id' or 'value' for columns 'source' and 'topics'"""
+    :param id_or_value: Choose either 'id' or 'value' for columns 'source' and 'topics'"""
 
-    if field == 'iso2code':
-        field = 'id'
+    if id_or_value == 'iso2code':
+        id_or_value = 'id'
 
-    return wb_get_table('indicator', indicator, language=language, field=field, expected=['id', 'value'], **params)
+    return wb_get_table('indicator', indicator, language=language, id_or_value=id_or_value, expected=['id', 'value'],
+                        **params)
 
 
 def search_indicators(pattern, language=None):
@@ -25,29 +26,34 @@ def search_indicators(pattern, language=None):
     return search(get_indicators(language=language), pattern)
 
 
-def get_series(indicator, country_list=None, field='value', drop_constant_index=False, **params):
+def get_series(indicator, country=None, use_labels=True, simplify_index=False, **params):
     """Return a Series with the indicator data.
     :param indicator: Indicator code (see indicators())
-    :param country_list: None (all countries), the id of a country, or a list of multiple ids
-    :param field: Choose between 'value' and 'id' for the index
-    :param drop_constant_index: Drop indexes when they take a single value
+    :param country: None (all countries), the id of a country, or a list of multiple country codes
+    :param use_labels: Should the index use codes or labels?
+    :param simplify_index: Drop index levels that have a single value
     :param params: Additional parameters for the World Bank API, like date or mrv"""
 
-    idx = wb_get('country', country_list, 'indicator', indicator, data_format='jsonstat', **params)
+    idx = wb_get('country', country, 'indicator', indicator, data_format='jsonstat', **params)
     idx = idx['WDI']
 
     dimension = idx.pop('dimension')
     value = idx.pop('value')
 
-    index = [_parse_category(dimension[dim], field == 'value') for dim in dimension['id']]
-    if field != 'value':
+    index = [_parse_category(dimension[dim], use_labels) for dim in dimension['id']]
+    if not use_labels:
         for idx, name in zip(index, dimension['id']):
             idx.name = name
 
-    if drop_constant_index:
+    if simplify_index:
         index = [dim for dim in index if len(dim) != 1]
 
-    return pd.Series(value, index=pd.MultiIndex.from_product(index, names=[dim.name for dim in index]), name=indicator)
+    if len(index) > 1:
+        index = pd.MultiIndex.from_product(index, names=[dim.name for dim in index])
+    else:
+        index = index[0]
+
+    return pd.Series(value, index=index, name=indicator)
 
 
 def _parse_category(cat, use_labels):

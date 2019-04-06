@@ -17,20 +17,20 @@ def collapse(country_list):
     return country_list if isinstance(country_list, str) else ';'.join(country_list) if country_list else 'all'
 
 
-def extract_preferred_field(data, field):
+def extract_preferred_field(data, id_or_value):
     """In case the preferred representation of data when the latter has multiple representations"""
-    if not field:
+    if not id_or_value:
         return data
 
     if not data:
         return ''
 
     if isinstance(data, dict):
-        if field in data:
-            return data[field]
+        if id_or_value in data:
+            return data[id_or_value]
 
     if isinstance(data, list):
-        return ','.join([extract_preferred_field(i, field) for i in data])
+        return ','.join([extract_preferred_field(i, id_or_value) for i in data])
 
     return data
 
@@ -74,7 +74,7 @@ def wb_get(*args, language='en', data_format='json', **kwargs):
 
 
 @cached(TTLCache(128, 3600))
-def _wb_get_table_cached(name, only=None, language=None, field=None, **params):
+def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **params):
     data = wb_get(name, only, language=language, **params)
 
     # We get a list (countries) of dictionary (properties)
@@ -82,7 +82,7 @@ def _wb_get_table_cached(name, only=None, language=None, field=None, **params):
     table = {}
 
     for col in columns:
-        table[col] = [extract_preferred_field(cnt[col], field) for cnt in data]
+        table[col] = [extract_preferred_field(cnt[col], id_or_value) for cnt in data]
 
     table = pd.DataFrame(table, columns=columns)
 
@@ -93,14 +93,14 @@ def _wb_get_table_cached(name, only=None, language=None, field=None, **params):
     return table.set_index('code')
 
 
-def wb_get_table(name, only=None, language=None, field=None, expected=None, **params):
+def wb_get_table(name, only=None, language=None, id_or_value=None, expected=None, **params):
     """Request data and return it in the form of a data frame"""
     if isinstance(only, list):
         only = ';'.join(only)
 
-    field = field or options.field
+    id_or_value = id_or_value or options.id_or_value
 
-    if expected and field not in expected:
-        raise ValueError("'field' should be one of '{}'".format("', '".join(expected)))
+    if expected and id_or_value not in expected:
+        raise ValueError("'id_or_value' should be one of '{}'".format("', '".join(expected)))
 
-    return _wb_get_table_cached(name, only, language or options.language, field, **params)
+    return _wb_get_table_cached(name, only, language or options.language, id_or_value, **params)
