@@ -8,18 +8,17 @@
 [![JupyterLab](https://img.shields.io/badge/Binder-JupyterLab-blue.svg)](
     https://mybinder.org/v2/gh/mwouts/world_bank_data/master?urlpath=lab)
 
+This is an implementation of the [World Bank API v2](https://datahelpdesk.worldbank.org/knowledgebase/articles/889386-developer-information-overview) in Python. Use this package to explore the [World Development Indicators](http://datatopics.worldbank.org/world-development-indicators/) published by the [World Bank](http://www.worldbank.org/).
 
-This is an implementation of the [World Bank API v2](https://datahelpdesk.worldbank.org/knowledgebase/articles/889386-developer-information-overview) in Python.
+# Quick tutorial
 
-# Install
+## Install
 
 Install or update the _World Bank Data_ python package with
 
 ```bash
 pip install world_bank_data --upgrade
 ```
-
-# Quick tutorial
 
 ## Get the list of sources, topics, countries, regions
 
@@ -52,38 +51,40 @@ In addition, give a try to
 - `get_incomelevels`
 - `get_lendingtypes`
 
-to see how the World countries are classified.
+to retrieve more information about country classifiers.
 
+## Get the list of indicators
 
-## Get the list of available indicators
-
-This is done with the `get_indicators` function. You may query only the indicators for a specific source or topic: use the index for that source or topic from `get_source` and `get_topic`. If you input no arguments, the `get_indicator` function will return the description of all the 16,000 indicators.
+This is done with the `get_indicators` function. You may query only the indicators for a specific source or topic as below. If you input no arguments, the `get_indicator` function will return the description of all the 16,000+ indicators. 
 
 ```python
-wb.get_indicators(topic=3, source=2)
+wb.get_indicators(topic=3, source=2)  # topic and source id are from get_topics/get_sources
 ```
+
+Requesting all indicators may take a few seconds, but no worries, the result is cached, so next time this will be instantaneous.
 
 ## Searching for one country or indicator
 
-
-Use the functions `search_countries`, `search_source`, `search_indicators`, or simply call `search` on your existing dataframe.
+Use the functions `search_countries`, `search_source`, `search_indicators`. Or, if you want to search in a existing dataframe, simply use `search`.
 
 ```python
 wb.search_indicators('mathematics')
 ```
 
-## Get indicator value
+## Get the values of an indicator
 
-The function `get_series` will return the value of a single indicator. The World Bank API accepts quite a few arguments, including:
+The function `get_series` returns the value of a single indicator. The World Bank API accepts quite a few arguments, including:
 - `mrv`, integer: one or more _most recent values_
 - `date`, string: either one year, or two years separated with a colon, like '2010:2018'
 - `gapfill`, string: 'Y' or 'N' (the default): forward fills missing values.
+
+For instance, the call below returns the most recent estimate for the World Population:
 
 ```python
 wb.get_series('SP.POP.TOTL', mrv=1)
 ```
 
-By default, the `get_series` function returns the full index given by the World bank, even if there is a single series and a single year. Use the argument `simplify_index` to ignore these dimensions. Also, use the argument `id_or_value='id'` if you prefer your data to be indexed by the codes rather than labels.
+The result above has a 3-dimensional index. Use the argument `simplify_index` to ignore the dimensions that take a single value (here: `year` and `series`). Also, use the argument `id_or_value='id'` if you prefer your data to be indexed by the codes rather than labels:
 
 ```python
 wb.get_series('SP.POP.TOTL', date='2016', id_or_value='id', simplify_index=True)
@@ -99,13 +100,21 @@ Go to our Binder and run either this [README](https://mybinder.org/v2/gh/mwouts/
 
 ## The World Bank
 
-This package eases the access to the [World Bank](https://www.worldbank.org/) Data. You can also explore the [Data Catalog](https://datacatalog.worldbank.org/), and the data itself directly on the [site](https://data.worldbank.org/indicator/sp.pop.totl).
+The [World Bank](https://www.worldbank.org/) Data has a [Data Catalog](https://datacatalog.worldbank.org/), and an interactive [data explorer](https://data.worldbank.org/indicator/sp.pop.totl).
 
 Third party applications that allow to access the data from various languages are listed [here](https://data.worldbank.org/products/third-party-apps).
 
 ## Google's Public Data Explorer
 
-The World Bank data can be visualized in Google's [Data Explorer](https://data.worldbank.org/products/third-party-apps).
+The World Bank data is also available in Google's [Data Explorer](https://data.worldbank.org/products/third-party-apps).
+
+## Python
+
+Alternatively to `world_bank_data`, Python users may find useful the following two packages:
+- [`wbpy`](https://github.com/mattduck/wbpy/blob/master/README.rst), nicely documented but last released in 2013.
+- [`wbdata`](https://github.com/oliversherouse/wbdata/blob/master/README.rst), which works well.
+
+The reason for which I wrote `world_bank_data` is mostly speed, e.g. I wanted to use the lastest version of the World Bank API (v2) and benefit from significant speed improvements. Reimplementing the API also gave me a finer control on the mapping of options.
 
 ## R
 
@@ -113,24 +122,13 @@ R users can use two packages to access the World Bank data:
 - [`WDI`](https://github.com/vincentarelbundock/WDI/blob/master/README.md) 
 - [`wbstats`](https://github.com/GIST-ORNL/wbstats/blob/master/README.md)
 
-See here for an [Introduction to the wbstats R-package](https://cran.r-project.org/web/packages/wbstats/vignettes/Using_the_wbstats_package.html). For a quick comparison of the two packages, see [here](https://cengel.github.io/gearup2016/worldbank.html).
-
-## Python
-
-Python users can also use, alternatively to `world_bank_data`, the following two packages:
-- [`wbpy`](https://github.com/mattduck/wbpy/blob/master/README.rst), nicely documented but last released in 2013.
-- [`wbdata`](https://github.com/oliversherouse/wbdata/blob/master/README.rst), which works well.
-
-The reason for which I wrote `world_bank_data` is mostly speed, e.g. I wanted to use the lastest version of the World Bank API (v2) and benefit from significant speed improvements. Reimplementing the API also gave me a finer control on the mapping of options.
-
+See also the [Introduction to the wbstats R-package](https://cran.r-project.org/web/packages/wbstats/vignettes/Using_the_wbstats_package.html), or this [quick review](https://cengel.github.io/gearup2016/worldbank.html) of the two packages.
 
 # FAQ
 
+## Country and indicator description in non-English languages
 
-
-## Using another language
-
-The World Bank describes their sources and indicators in a few other languages than English. Use either the `language` argument in each function, or change the default globally:
+The World Bank describes their sources and indicators in a other languages than English. Use either the `language` argument in each of `get_countries`, `get_indicators`, etc, or change the default globally:
 
 ```python
 wb.options.language = 'vi'
