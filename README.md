@@ -12,7 +12,7 @@ This is an implementation of the [World Bank API v2](https://datahelpdesk.worldb
 
 # Quick tutorial
 
-## Install
+## Installation
 
 Install or update the _World Bank Data_ python package with
 
