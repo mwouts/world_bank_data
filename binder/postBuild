@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -ex
+
+# Trust our notebooks
+jupyter trust examples/*.ipynb
+
+# Extensions
+# 1. TOC
+jupyter contrib nbextension install --user
+jupyter nbextension enable toc2/main
+
+# 2. Jupytext
+jupyter serverextension install jupytext
+jupyter serverextension enable jupytext
+jupyter nbextension install --py jupytext
+jupyter nbextension enable --py jupytext
+jupyter labextension install jupyterlab-jupytext
