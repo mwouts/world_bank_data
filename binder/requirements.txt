@@ -1,3 +1,4 @@
 world_bank_data
+jupyterlab
 jupytext
 plotly
