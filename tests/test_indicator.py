@@ -16,7 +16,13 @@ def test_indicators_two():
 
 def test_indicators():
     idx = get_indicators()
-    assert len(idx.index) > 1000
+    assert len(idx.index) > 16000
+    assert_numeric_or_string(idx)
+
+
+def test_indicators_topic():
+    idx = get_indicators(topic=5)
+    assert len(idx.index) < 100
     assert_numeric_or_string(idx)
 
 

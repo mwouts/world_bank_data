@@ -45,6 +45,9 @@ def wb_get(*args, language='en', data_format='json', **kwargs):
         args = list(args)
         args[1] = collapse(args[1])
 
+    if 'topic' in params:
+        args = ['topic', str(params.pop('topic'))] + args
+
     if language != 'en':
         args = [language] + args
 
