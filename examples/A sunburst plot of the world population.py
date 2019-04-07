@@ -13,31 +13,31 @@
 #     name: python3
 # ---
 
-# In this notebook we use the new Sunburst plot by [plotly](http://plot.ly/) to illustrate how the World population is splitted among regions and countries. The data set illustrated here originates from the [World Bank](https://data.worldbank.org).
+# In this notebook we use the new Sunburst plot by [plotly](http://plot.ly/) to illustrate how the World population
+# is splitted among regions and countries. The data set illustrated here originates from the
+# [World Bank](https://data.worldbank.org).
 
 # +
-import numpy as np
 import pandas as pd
 import urllib
 import mock
 import plotly.offline as offline
-import plotly.graph_objs as go
+import world_bank_data as wb
 
-# Head and tail of data frames
+# Only show head and tail of dataframes
 pd.set_option('display.max_rows', 6)
 
-# Patch plotly.py to use the latest plotly.js
-url = 'https://cdn.plot.ly/plotly-latest.min.js'
 
-def plotly_latest():
+# Plotly.js in version 1.46.1
+def get_latest_plotlyjs(url='https://cdn.plot.ly/plotly-1.46.1.min.js'):
     return urllib.request.urlopen(url).read().decode('utf-8')
 
-with mock.patch('plotly.offline.offline.get_plotlyjs', plotly_latest):
+
+with mock.patch('plotly.offline.offline.get_plotlyjs', get_latest_plotlyjs):
     offline.init_notebook_mode()
 # -
 
-# Country and associated regions
-import world_bank_data as wb
+# Countries and associated regions
 countries = wb.get_countries()
 countries
 
@@ -46,11 +46,11 @@ population = wb.get_series('SP.POP.TOTL', mrv=1)
 population
 
 # Same data set, indexed with the country code
-population = wb.get_series('SP.POP.TOTL', use_labels=False, simplify_index=True, mrv=1)
+population = wb.get_series('SP.POP.TOTL', id_or_value='id', simplify_index=True, mrv=1)
 population
 
 # Aggregate region, country and population
-df = countries[['region', 'name']].rename(columns={'name':'country'}).loc[countries.region!='Aggregates']
+df = countries[['region', 'name']].rename(columns={'name': 'country'}).loc[countries.region != 'Aggregates']
 df['population'] = population
 df
 
@@ -61,22 +61,25 @@ columns = ['parents', 'labels', 'values']
 
 level1 = df.copy()
 level1.columns = columns
-level1['text'] = level1['values'].apply(lambda pop:'{:,.0f}'.format(pop))
+level1['text'] = level1['values'].apply(lambda pop: '{:,.0f}'.format(pop))
 
 level2 = df.groupby('region').population.sum().reset_index()[['region', 'region', 'population']]
 level2.columns = columns
 level2['parents'] = 'World'
 # move value to text for this level
-level2['text'] = level2['values'].apply(lambda pop:'{:,.0f}'.format(pop))
+level2['text'] = level2['values'].apply(lambda pop: '{:,.0f}'.format(pop))
 level2['values'] = 0
 
-all_levels = pd.concat([level1, level2], axis=0).reset_index(drop=True)
+level3 = pd.DataFrame({'parents': [''], 'labels': ['World'],
+                       'values': [0.0], 'text': ['{:,.0f}'.format(population.loc['WLD'])]})
+
+all_levels = pd.concat([level1, level2, level3], axis=0).reset_index(drop=True)
 all_levels
 # -
 
 # And now we can plot the World Population
 offline.iplot(dict(
-    data = [dict(type='sunburst', **all_levels, hoverinfo='text')],
-    layout = dict(title='World Population (World Bank, 2017)<br>Click on a region to zoom',
-                  width=800, height=800)),
-              validate=False)
+    data=[dict(type='sunburst', **all_levels, hoverinfo='text')],
+    layout=dict(title='World Population (World Bank, 2017)<br>Click on a region to zoom',
+                width=800, height=800)),
+    validate=False)
