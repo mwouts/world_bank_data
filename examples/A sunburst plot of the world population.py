@@ -20,10 +20,16 @@
 
 # +
 import pandas as pd
-import urllib
 import mock
 import plotly.offline as offline
 import world_bank_data as wb
+
+try:
+    # Python 3.6
+    from urllib.request import urlopen
+except ImportError:
+    # Python 2.7
+    from urllib import urlopen
 
 # Only show head and tail of dataframes
 pd.set_option('display.max_rows', 6)
@@ -31,7 +37,7 @@ pd.set_option('display.max_rows', 6)
 
 # Plotly.js in version 1.46.1
 def get_latest_plotlyjs(url='https://cdn.plot.ly/plotly-1.46.1.min.js'):
-    return urllib.request.urlopen(url).read().decode('utf-8')
+    return urlopen(url).read().decode('utf-8')
 
 
 with mock.patch('plotly.offline.offline.get_plotlyjs', get_latest_plotlyjs):
@@ -80,7 +86,9 @@ all_levels
 
 # And now we can plot the World Population
 offline.iplot(dict(
-    data=[dict(type='sunburst', **all_levels, hoverinfo='text')],
+    data=[dict(type='sunburst', hoverinfo='text', **all_levels)],
     layout=dict(title='World Population (World Bank, 2017)<br>Click on a region to zoom',
                 width=800, height=800)),
     validate=False)
+
+
