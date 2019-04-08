@@ -41,10 +41,11 @@ def extract_preferred_field(data, id_or_value):
     return data
 
 
-def wb_get(*args, language='en', data_format='json', **kwargs):
+def wb_get(*args, **kwargs):
     """Request the World Bank for the desired information"""
     params = copy(kwargs)
-    params['format'] = data_format
+    language = params.pop('language') if 'language' in params else 'en'
+    params.setdefault('format', 'json')
 
     # collapse the list of countries to a single str
     if len(args) > 1:
@@ -57,7 +58,7 @@ def wb_get(*args, language='en', data_format='json', **kwargs):
     if language != 'en':
         args = [language] + args
 
-    url = '/'.join([WORLD_BANK_URL, *args])
+    url = '/'.join([WORLD_BANK_URL] + args)
 
     response = get(url=url, params=params)
     response.raise_for_status()
@@ -71,7 +72,7 @@ def wb_get(*args, language='en', data_format='json', **kwargs):
         raise ValueError("{msg}\nurl={url}\nparams={params}".format(msg=msg, url=url, params=params))
 
     # Redo the request and get the full information when the first response is incomplete
-    if data_format == 'json' and isinstance(data, list):
+    if params['format'] == 'json' and isinstance(data, list):
         page_information, data = data
         if int(page_information['pages']) > 1:
             params['per_page'] = page_information['total']
@@ -91,7 +92,9 @@ def wb_get(*args, language='en', data_format='json', **kwargs):
 
 @cached(TTLCache(128, 3600))
 def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **params):
-    data = wb_get(name, only, language=language, **params)
+    if language:
+        params['language'] = language
+    data = wb_get(name, only, **params)
 
     # We get a list (countries) of dictionary (properties)
     columns = data[0].keys()

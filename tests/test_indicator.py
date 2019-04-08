@@ -71,6 +71,18 @@ def test_indicator_date():
     assert_numeric_or_string(idx)
 
 
+def test_indicator_values():
+    idx = get_series('SP.POP.TOTL', date='2017', simplify_index=True).sort_values(ascending=False)
+    assert len(idx.index) > 200
+    assert idx.index.values[0] == 'World'
+    assert idx.iloc[0] == 7530360149.0
+
+    idx = get_series('SP.POP.TOTL', date='2017', simplify_index=True, id_or_value='id').sort_values(ascending=False)
+    assert len(idx.index) > 200
+    assert idx.index.values[0] == 'WLD'
+    assert idx.iloc[0] == 7530360149.0
+
+
 @pytest.mark.skip('jsonstat format not supported here')
 def test_indicator_monthly():
     idx = get_series('DPANUSSPB', country=['CHN', 'BRA'], date='2012M01:2012M08')

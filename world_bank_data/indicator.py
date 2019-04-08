@@ -37,8 +37,9 @@ def get_series(indicator, country=None, id_or_value=None, simplify_index=False, 
     :param params: Additional parameters for the World Bank API, like date or mrv"""
 
     id_or_value = id_or_value or options.id_or_value
+    params['format'] = 'jsonstat'
 
-    idx = wb_get('country', country, 'indicator', indicator, data_format='jsonstat', **params)
+    idx = wb_get('country', country, 'indicator', indicator, **params)
     _, idx = idx.popitem()
 
     dimension = idx.pop('dimension')
@@ -71,14 +72,14 @@ def _parse_category(cat, use_labels):
     cat = cat['category']
 
     index = np.array(list(cat['index'].values()))
-    assert np.array_equal(index, np.arange(len(index))), 'Index should be ordered. Please use Python 3.6 or above.'
-
     codes = np.array(list(cat['index'].keys()))
+
+    codes = pd.Series(codes, index=index, name=name).sort_index()
     if not use_labels:
-        return pd.Series(codes, index=index, name=name)
+        return codes
 
     codes2 = np.array(list(cat['label'].keys()))
-    assert np.array_equal(codes, codes2), 'Codes should be identical'
-
     labels = np.array(list(cat['label'].values()))
-    return pd.Series(labels, index=index, name=name)
+    labels = pd.Series(labels, index=codes2, name=name).sort_index()
+
+    return pd.Series(labels.loc[codes].values, index=codes.index, name=name)
