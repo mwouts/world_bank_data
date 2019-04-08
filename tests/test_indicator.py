@@ -27,6 +27,15 @@ def test_indicators_topic():
     assert_numeric_or_string(idx)
 
 
+def test_indicators_source():
+    idx = get_indicators(source=11)
+    assert len(idx.index) < 2000
+    assert_numeric_or_string(idx)
+
+    with pytest.raises(ValueError):
+        get_indicators(source=21)
+
+
 def test_indicator_most_recent_value():
     idx = get_series('SP.POP.TOTL', mrv=1)
     assert len(idx.index) > 200
