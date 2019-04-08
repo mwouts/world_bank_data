@@ -26,22 +26,22 @@ def test_topics():
 def test_sources():
     df = get_sources()
     assert df.index.names == ['id']
-    assert df.columns.to_list() == ['lastupdated', 'name', 'code', 'description', 'url', 'dataavailability',
-                                    'metadataavailability', 'concepts']
+    assert set(df.columns) == set(['lastupdated', 'name', 'code', 'description', 'url', 'dataavailability',
+                                   'metadataavailability', 'concepts'])
     assert_numeric_or_string(df)
 
 
 def test_sources_int():
     df = get_sources(11)
     assert df.index.names == ['id']
-    assert df.columns.to_list() == ['lastupdated', 'name', 'code', 'description', 'url', 'dataavailability',
-                                    'metadataavailability', 'concepts']
+    assert set(df.columns) == set(['lastupdated', 'name', 'code', 'description', 'url', 'dataavailability',
+                                   'metadataavailability', 'concepts'])
     assert_numeric_or_string(df)
 
 
 def test_sources_two_int():
     df = get_sources([11, 36])
     assert df.index.names == ['id']
-    assert df.columns.to_list() == ['lastupdated', 'name', 'code', 'description', 'url', 'dataavailability',
-                                    'metadataavailability', 'concepts']
+    assert set(df.columns) == set(['lastupdated', 'name', 'code', 'description', 'url', 'dataavailability',
+                                   'metadataavailability', 'concepts'])
     assert_numeric_or_string(df)
