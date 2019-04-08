@@ -1,5 +1,4 @@
 world_bank_data
 plotly
-jupyterlab
 jupytext
 jupyter_contrib_nbextensions
