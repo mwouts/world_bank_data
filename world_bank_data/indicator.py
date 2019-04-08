@@ -2,9 +2,9 @@
 
 import numpy as np
 import pandas as pd
+import world_bank_data.options as options
 from .request import wb_get, wb_get_table
 from .search import search
-import world_bank_data.options as options
 
 
 def get_indicators(indicator=None, language=None, id_or_value=None, **params):
@@ -39,7 +39,7 @@ def get_series(indicator, country=None, id_or_value=None, simplify_index=False, 
     id_or_value = id_or_value or options.id_or_value
 
     idx = wb_get('country', country, 'indicator', indicator, data_format='jsonstat', **params)
-    idx = idx['WDI']
+    _, idx = idx.popitem()
 
     dimension = idx.pop('dimension')
     value = idx.pop('value')
