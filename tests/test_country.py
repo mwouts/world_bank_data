@@ -25,7 +25,7 @@ def test_country_language():
 
 def test_two_countries():
     cnt = get_countries(['FRA', 'ITA'])
-    assert cnt.index.to_list() == ['FRA', 'ITA']
+    assert set(cnt.index) == set(['FRA', 'ITA'])
     assert cnt.latitude.dtype == float
     assert_numeric_or_string(cnt)
 
