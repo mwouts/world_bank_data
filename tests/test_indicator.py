@@ -1,4 +1,5 @@
 import pytest
+import numbers
 from world_bank_data import get_indicators, get_series
 from .tools import assert_numeric_or_string
 
@@ -26,6 +27,15 @@ def test_indicators_topic():
     assert_numeric_or_string(idx)
 
 
+def test_indicators_source():
+    idx = get_indicators(source=11)
+    assert len(idx.index) < 2000
+    assert_numeric_or_string(idx)
+
+    with pytest.raises(ValueError):
+        get_indicators(source=21)
+
+
 def test_indicator_most_recent_value():
     idx = get_series('SP.POP.TOTL', mrv=1)
     assert len(idx.index) > 200
@@ -36,6 +46,12 @@ def test_indicator_most_recent_value():
     assert_numeric_or_string(idx_mrv5)
 
 
+def test_non_wdi_indicator():
+    idx = get_series('TX.VAL.MRCH.CD.WB', mrv=1)
+    assert len(idx.index) > 50
+    assert_numeric_or_string(idx)
+
+
 def test_indicator_use_id():
     idx = get_series('SP.POP.TOTL', mrv=1, id_or_value='id', simplify_index=True)
     assert len(idx.index) > 200
@@ -44,10 +60,27 @@ def test_indicator_use_id():
     assert idx.index.names == ['Country']
 
 
+def test_indicator_simplify_scalar():
+    pop = get_series('SP.POP.TOTL', 'CHN', mrv=1, simplify_index=True)
+    assert isinstance(pop, numbers.Number)
+
+
 def test_indicator_date():
     idx = get_series('SP.POP.TOTL', date='2010:2018')
     assert len(idx.index) > 200 * 8
     assert_numeric_or_string(idx)
+
+
+def test_indicator_values():
+    idx = get_series('SP.POP.TOTL', date='2017', simplify_index=True).sort_values(ascending=False)
+    assert len(idx.index) > 200
+    assert idx.index.values[0] == 'World'
+    assert idx.iloc[0] == 7530360149.0
+
+    idx = get_series('SP.POP.TOTL', date='2017', simplify_index=True, id_or_value='id').sort_values(ascending=False)
+    assert len(idx.index) > 200
+    assert idx.index.values[0] == 'WLD'
+    assert idx.iloc[0] == 7530360149.0
 
 
 @pytest.mark.skip('jsonstat format not supported here')

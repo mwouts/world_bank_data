@@ -12,9 +12,15 @@ class WBRequestError(HTTPError):
     """An error occured when downloading the WB data"""
 
 
-def collapse(country_list):
-    """Collapse multiple countries to a colon-separated list of countries"""
-    return country_list if isinstance(country_list, str) else ';'.join(country_list) if country_list else 'all'
+def collapse(values):
+    """Collapse multiple values to a colon-separated list of values"""
+    if isinstance(values, str):
+        return values
+    if values is None:
+        return 'all'
+    if isinstance(values, list):
+        return ';'.join([collapse(v) for v in values])
+    return str(values)
 
 
 def extract_preferred_field(data, id_or_value):
@@ -35,10 +41,11 @@ def extract_preferred_field(data, id_or_value):
     return data
 
 
-def wb_get(*args, language='en', data_format='json', **kwargs):
+def wb_get(*args, **kwargs):
     """Request the World Bank for the desired information"""
     params = copy(kwargs)
-    params['format'] = data_format
+    language = params.pop('language') if 'language' in params else 'en'
+    params.setdefault('format', 'json')
 
     # collapse the list of countries to a single str
     if len(args) > 1:
@@ -51,14 +58,21 @@ def wb_get(*args, language='en', data_format='json', **kwargs):
     if language != 'en':
         args = [language] + args
 
-    url = '/'.join([WORLD_BANK_URL, *args])
+    url = '/'.join([WORLD_BANK_URL] + args)
 
     response = get(url=url, params=params)
     response.raise_for_status()
     data = response.json()
+    if isinstance(data, list) and data and 'message' in data[0]:
+        try:
+            msg = data[0]['message'][0]['value']
+        except (KeyError, IndexError):
+            msg = str(msg)
+
+        raise ValueError("{msg}\nurl={url}\nparams={params}".format(msg=msg, url=url, params=params))
 
     # Redo the request and get the full information when the first response is incomplete
-    if data_format == 'json' and isinstance(data, list):
+    if params['format'] == 'json' and isinstance(data, list):
         page_information, data = data
         if int(page_information['pages']) > 1:
             params['per_page'] = page_information['total']
@@ -78,7 +92,9 @@ def wb_get(*args, language='en', data_format='json', **kwargs):
 
 @cached(TTLCache(128, 3600))
 def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **params):
-    data = wb_get(name, only, language=language, **params)
+    if language:
+        params['language'] = language
+    data = wb_get(name, only, **params)
 
     # We get a list (countries) of dictionary (properties)
     columns = data[0].keys()
@@ -98,9 +114,7 @@ def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **par
 
 def wb_get_table(name, only=None, language=None, id_or_value=None, expected=None, **params):
     """Request data and return it in the form of a data frame"""
-    if isinstance(only, list):
-        only = ';'.join(only)
-
+    only = collapse(only)
     id_or_value = id_or_value or options.id_or_value
 
     if expected and id_or_value not in expected:

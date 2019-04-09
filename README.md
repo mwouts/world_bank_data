@@ -100,7 +100,7 @@ Go to our Binder and run either this [README](https://mybinder.org/v2/gh/mwouts/
 
 ## The World Bank
 
-The [World Bank](https://www.worldbank.org/) Data has a [Data Catalog](https://datacatalog.worldbank.org/), and an interactive [data explorer](https://data.worldbank.org/indicator/sp.pop.totl).
+The [World Bank](https://www.worldbank.org/) has a [Data Catalog](https://datacatalog.worldbank.org/), and an interactive [data explorer](https://data.worldbank.org/indicator/sp.pop.totl).
 
 Third party applications that allow to access the data from various languages are listed [here](https://data.worldbank.org/products/third-party-apps).
 
@@ -110,9 +110,10 @@ The World Bank data is also available in Google's [Data Explorer](https://data.w
 
 ## Python
 
-Alternatively to `world_bank_data`, Python users may find useful the following two packages:
+Alternatively to `world_bank_data`, Python users may find useful the following packages:
 - [`wbpy`](https://github.com/mattduck/wbpy/blob/master/README.rst), nicely documented but last released in 2013.
 - [`wbdata`](https://github.com/oliversherouse/wbdata/blob/master/README.rst), which works well.
+- [`pandas_datareader`](https://pandas-datareader.readthedocs.io/en/latest/readers/world-bank.html)
 
 The reason for which I wrote `world_bank_data` is mostly speed, e.g. I wanted to use the lastest version of the World Bank API (v2) and benefit from significant speed improvements. Reimplementing the API also gave me a finer control on the mapping of options.
 
@@ -128,7 +129,7 @@ See also the [Introduction to the wbstats R-package](https://cran.r-project.org/
 
 ## Country and indicator description in non-English languages
 
-The World Bank describes their sources and indicators in a other languages than English. Use either the `language` argument in each of `get_countries`, `get_indicators`, etc, or change the default globally:
+The World Bank describes their sources and indicators in other languages than English. Use either the `language` argument in each of `get_countries`, `get_indicators`, etc, or change the default globally:
 
 ```python
 wb.options.language = 'vi'

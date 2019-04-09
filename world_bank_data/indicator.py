@@ -2,9 +2,9 @@
 
 import numpy as np
 import pandas as pd
+import world_bank_data.options as options
 from .request import wb_get, wb_get_table
 from .search import search
-import world_bank_data.options as options
 
 
 def get_indicators(indicator=None, language=None, id_or_value=None, **params):
@@ -37,9 +37,10 @@ def get_series(indicator, country=None, id_or_value=None, simplify_index=False, 
     :param params: Additional parameters for the World Bank API, like date or mrv"""
 
     id_or_value = id_or_value or options.id_or_value
+    params['format'] = 'jsonstat'
 
-    idx = wb_get('country', country, 'indicator', indicator, data_format='jsonstat', **params)
-    idx = idx['WDI']
+    idx = wb_get('country', country, 'indicator', indicator, **params)
+    _, idx = idx.popitem()
 
     dimension = idx.pop('dimension')
     value = idx.pop('value')
@@ -53,9 +54,15 @@ def get_series(indicator, country=None, id_or_value=None, simplify_index=False, 
         index = [dim for dim in index if len(dim) != 1]
 
     if len(index) > 1:
+        # Our series is indexed by a multi-index
         index = pd.MultiIndex.from_product(index, names=[dim.name for dim in index])
-    else:
+    elif len(index) == 1:
+        # A simple index is enough
         index = index[0]
+    else:
+        # Index has dimension zero. Data should be a scalar
+        assert len(value) == 1, 'Data has no dimension and was expected to be a scalar'
+        return value[0]
 
     return pd.Series(value, index=index, name=indicator)
 
@@ -65,14 +72,14 @@ def _parse_category(cat, use_labels):
     cat = cat['category']
 
     index = np.array(list(cat['index'].values()))
-    assert np.array_equal(index, np.arange(len(index))), 'Index should be ordered. Please use Python 3.6 or above.'
-
     codes = np.array(list(cat['index'].keys()))
+
+    codes = pd.Series(codes, index=index, name=name).sort_index()
     if not use_labels:
-        return pd.Series(codes, index=index, name=name)
+        return codes
 
     codes2 = np.array(list(cat['label'].keys()))
-    assert np.array_equal(codes, codes2), 'Codes should be identical'
-
     labels = np.array(list(cat['label'].values()))
-    return pd.Series(labels, index=index, name=name)
+    labels = pd.Series(labels, index=codes2, name=name).sort_index()
+
+    return pd.Series(labels.loc[codes].values, index=codes.index, name=name)
