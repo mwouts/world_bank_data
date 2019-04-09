@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     install_requires=['pandas', 'requests', 'cachetools'],
     license='MIT',
-    classifiers=('Development Status :: 3 - Alpha',
+    classifiers=['Development Status :: 3 - Alpha',
                  'License :: OSI Approved :: MIT License',
                  'Environment :: Console',
                  'Framework :: Jupyter',
@@ -37,5 +37,5 @@ setup(
                  'Programming Language :: Python :: 3.4',
                  'Programming Language :: Python :: 3.5',
                  'Programming Language :: Python :: 3.6',
-                 'Programming Language :: Python :: 3.7')
+                 'Programming Language :: Python :: 3.7']
 )
