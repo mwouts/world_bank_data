@@ -46,6 +46,7 @@ def wb_get(*args, **kwargs):
     params = copy(kwargs)
     language = params.pop('language') if 'language' in params else 'en'
     params.setdefault('format', 'json')
+    params.setdefault('per_page', 20000)
 
     # collapse the list of countries to a single str
     if len(args) > 1:
@@ -74,14 +75,14 @@ def wb_get(*args, **kwargs):
     # Redo the request and get the full information when the first response is incomplete
     if params['format'] == 'json' and isinstance(data, list):
         page_information, data = data
-        if int(page_information['pages']) > 1:
-            params['per_page'] = page_information['total']
-            response = get(url=url, params=params)
-            response.raise_for_status()
-            page_information, data = response.json()
-
-            if int(page_information['pages']) > 1:
-                raise WBRequestError('Unable to download the data in full')
+        if 'page' not in params:
+            current_page = 1
+            while current_page < int(page_information['pages']):
+                params['page'] = current_page = int(page_information['page']) + 1
+                response = get(url=url, params=params)
+                response.raise_for_status()
+                page_information, new_data = response.json()
+                data.extend(new_data)
 
     if not data:
         raise RuntimeError("The request returned no data:\nurl={url}\nparams={params}"
