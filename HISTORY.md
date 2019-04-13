@@ -1,6 +1,13 @@
 Release History
 ===============
 
+0.1.2 (2019-04-13)
+------------------
+
+**BugFixes**
+
+- Fix _Unable to download the data in full_ error on `get_indicators`
+
 0.1.1 (2019-04-09)
 ------------------
 
