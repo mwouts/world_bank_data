@@ -2,6 +2,7 @@ import pytest
 import numbers
 from world_bank_data import get_indicators, get_series
 from .tools import assert_numeric_or_string
+from pandas.testing import assert_frame_equal
 
 
 def test_indicators_one():
@@ -19,6 +20,12 @@ def test_indicators():
     idx = get_indicators()
     assert len(idx.index) > 16000
     assert_numeric_or_string(idx)
+
+
+def test_indicators_per_page():
+    idx = get_indicators().sort_index()
+    idx2 = get_indicators(per_page=5000).sort_index()
+    assert_frame_equal(idx, idx2)
 
 
 def test_indicators_topic():
