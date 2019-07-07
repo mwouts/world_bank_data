@@ -82,12 +82,12 @@ def test_indicator_values():
     idx = get_series('SP.POP.TOTL', date='2017', simplify_index=True).sort_values(ascending=False)
     assert len(idx.index) > 200
     assert idx.index.values[0] == 'World'
-    assert idx.iloc[0] == 7530360149.0
+    assert idx.iloc[0] == 7510990456.0
 
     idx = get_series('SP.POP.TOTL', date='2017', simplify_index=True, id_or_value='id').sort_values(ascending=False)
     assert len(idx.index) > 200
     assert idx.index.values[0] == 'WLD'
-    assert idx.iloc[0] == 7530360149.0
+    assert idx.iloc[0] == 7510990456.0
 
 
 @pytest.mark.skip('jsonstat format not supported here')
