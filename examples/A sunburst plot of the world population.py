@@ -5,8 +5,8 @@
 #     text_representation:
 #       extension: .py
 #       format_name: light
-#       format_version: '1.3'
-#       jupytext_version: 1.0.5
+#       format_version: '1.4'
+#       jupytext_version: 1.2.0-rc1
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -20,28 +20,19 @@
 
 # +
 import pandas as pd
-import mock
+import plotly
 import plotly.offline as offline
 import world_bank_data as wb
 
-try:
-    # Python 3.6
-    from urllib.request import urlopen
-except ImportError:
-    # Python 2.7
-    from urllib import urlopen
 
-# Only show head and tail of dataframes
-pd.set_option('display.max_rows', 6)
+def version_to_int_list(version):
+    return [int(s) for s in version.split('.')]
 
 
-# Plotly.js in version 1.46.1
-def get_latest_plotlyjs(url='https://cdn.plot.ly/plotly-1.46.1.min.js'):
-    return urlopen(url).read().decode('utf-8')
+assert version_to_int_list(plotly.__version__) >= version_to_int_list('3.8.0'), 'Sunburst plots require Plotly >= 3.8.0'
 
-
-with mock.patch('plotly.offline.offline.get_plotlyjs', get_latest_plotlyjs):
-    offline.init_notebook_mode()
+pd.set_option('display.max_rows', 12)
+offline.init_notebook_mode()
 # -
 
 # Countries and associated regions
@@ -90,5 +81,3 @@ offline.iplot(dict(
     layout=dict(title='World Population (World Bank, 2017)<br>Click on a region to zoom',
                 width=800, height=800)),
     validate=False)
-
-

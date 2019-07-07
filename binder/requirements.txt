@@ -1,4 +1,4 @@
 world_bank_data
-plotly
+plotly>=3.8
 jupytext
 jupyter_contrib_nbextensions

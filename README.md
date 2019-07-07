@@ -94,7 +94,7 @@ wb.get_series('SP.POP.TOTL', date='2016', id_or_value='id', simplify_index=True)
 
 ## Ready for an interative tutorial?
 
-Go to our Binder and run either this [README](https://mybinder.org/v2/gh/mwouts/world_bank_data/master?filepath=README.md), or our other [tutorial](https://mybinder.org/v2/gh/mwouts/world_bank_data/master?filepath=examples%2FA%20sunburst%20plot%20of%20the%20world%20population.ipynb) on how to produce this plot of the World Population.
+Go to our [Binder](https://mybinder.org/v2/gh/mwouts/world_bank_data/master) and run either this [README](https://github.com/mwouts/world_bank_data/blob/master/README.md), or our other [tutorial](https://github.com/mwouts/world_bank_data/blob/master/examples/) with the code required to produce this plot of the World Population:
 
 [![World Population 2017](https://gist.githubusercontent.com/mwouts/ec3a88f1d97e36a062f69d4072b91e39/raw/79211a09957c6934fabf738a59c2c9b8df943696/world_population.gif)](https://nbviewer.jupyter.org/github/mwouts/world_bank_data/blob/master/examples/A%20sunburst%20plot%20of%20the%20world%20population.ipynb)
 
