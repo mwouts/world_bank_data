@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.com/mwouts/world_bank_data.svg?branch=master)](https://travis-ci.com/mwouts/world_bank_data)
 [![codecov.io](https://codecov.io/github/mwouts/world_bank_data/coverage.svg?branch=master)](https://codecov.io/github/mwouts/world_bank_data?branch=master)
 [![Language grade: Python](https://img.shields.io/badge/lgtm-A+-brightgreen.svg)](https://lgtm.com/projects/g/mwouts/world_bank_data/context:python)
+[![Pypi](https://img.shields.io/pypi/v/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
+[![pyversions](https://img.shields.io/pypi/pyversions/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
 [![Jupyter Notebook](https://img.shields.io/badge/Binder-Notebook-blue.svg)](
     https://mybinder.org/v2/gh/mwouts/world_bank_data/master?filepath=examples%2FA%20sunburst%20plot%20of%20the%20world%20population.ipynb)
 [![JupyterLab](https://img.shields.io/badge/Binder-JupyterLab-blue.svg)](
