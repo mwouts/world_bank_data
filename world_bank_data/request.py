@@ -1,4 +1,5 @@
 """Request the world bank API"""
+import re
 import json
 from copy import copy
 from requests import get, HTTPError
@@ -65,7 +66,11 @@ def wb_get(*args, **kwargs):
 
     response = get(url=url, params=params, proxies=proxies)
     response.raise_for_status()
-    data = response.json()
+    try:
+        data = response.json()
+    except ValueError:  # simplejson.errors.JSONDecodeError derives from ValueError
+        raise ValueError("{msg}\nurl={url}\nparams={params}".format(msg=_extract_message(response.text),
+                                                                    url=url, params=params))
     if isinstance(data, list) and data and 'message' in data[0]:
         try:
             msg = data[0]['message'][0]['value']
@@ -91,6 +96,17 @@ def wb_get(*args, **kwargs):
                            .format(url=url, params=params))
 
     return data
+
+
+def _extract_message(msg):
+    """'ï»¿<?xml version="1.0" encoding="utf-8"?>
+<wb:error xmlns:wb="http://www.worldbank.org">
+  <wb:message id="175" key="Invalid format">The indicator was not found. It may have been deleted or archived.</wb:message>
+</wb:error>'"""
+    if 'wb:message' not in msg:
+        return msg
+    return re.sub(re.compile('.*<wb:message[^>]*>', re.DOTALL), '',
+                  re.sub(re.compile('</wb:message>.*', re.DOTALL), '', msg))
 
 
 def _robust_key(*args, **kwargs):

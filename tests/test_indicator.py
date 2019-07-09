@@ -1,5 +1,6 @@
 import pytest
 import numbers
+import random
 from world_bank_data import get_indicators, get_series
 from .tools import assert_numeric_or_string
 from pandas.testing import assert_frame_equal
@@ -95,3 +96,24 @@ def test_indicator_monthly():
     idx = get_series('DPANUSSPB', country=['CHN', 'BRA'], date='2012M01:2012M08')
     assert len(idx.index) > 200 * 12
     assert_numeric_or_string(idx)
+
+
+def random_indicators():
+    random.seed(2019)
+    all_indicators = get_indicators()
+    return random.sample(all_indicators.index.tolist(), 12)
+
+
+@pytest.mark.parametrize('indicator', random_indicators())
+def test_random_indicators(indicator):
+    try:
+        idx = get_series(indicator, mrv=1)
+        assert_numeric_or_string(idx)
+    except ValueError as err:
+        assert 'The indicator was not found' in str(err)
+
+
+def test_json_error():
+    indicator = 'NV.IND.MANF.KD.87'
+    with pytest.raises(ValueError, match='The indicator was not found. It may have been deleted or archived.'):
+        get_series(indicator, mrv=1)
