@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Request the world bank API"""
 import re
 import json
