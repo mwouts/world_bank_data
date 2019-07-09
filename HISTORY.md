@@ -1,13 +1,14 @@
 Release History
 ===============
 
-0.1.3 (2019-07-07)
+0.1.3 (2019-07-10)
 ------------------
 
 **Improvements**
 
+- Added a new `proxies` argument in the `get_*` functions, and a global `proxies` option (#2)
+- Return an explicit error message when an indicator is not found (#7)
 - Package tested with Python 3.8
-- 
 
 
 0.1.2 (2019-04-13)
