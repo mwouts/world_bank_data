@@ -1,8 +1,9 @@
 """Request the world bank API"""
+import json
 from copy import copy
 from requests import get, HTTPError
 import pandas as pd
-from cachetools import cached, TTLCache
+from cachetools import cached, TTLCache, keys
 import world_bank_data.options as options
 
 WORLD_BANK_URL = 'http://api.worldbank.org/v2'
@@ -44,7 +45,8 @@ def extract_preferred_field(data, id_or_value):
 def wb_get(*args, **kwargs):
     """Request the World Bank for the desired information"""
     params = copy(kwargs)
-    language = params.pop('language') if 'language' in params else 'en'
+    language = params.pop('language', 'en')
+    proxies = params.pop('proxies', options.proxies)
     params.setdefault('format', 'json')
     params.setdefault('per_page', 20000)
 
@@ -61,7 +63,7 @@ def wb_get(*args, **kwargs):
 
     url = '/'.join([WORLD_BANK_URL] + args)
 
-    response = get(url=url, params=params)
+    response = get(url=url, params=params, proxies=proxies)
     response.raise_for_status()
     data = response.json()
     if isinstance(data, list) and data and 'message' in data[0]:
@@ -91,7 +93,13 @@ def wb_get(*args, **kwargs):
     return data
 
 
-@cached(TTLCache(128, 3600))
+def _robust_key(*args, **kwargs):
+    if 'proxies' in kwargs:
+        kwargs['proxies'] = json.dumps(kwargs['proxies'])
+    return keys.hashkey(*args, **kwargs)
+
+
+@cached(TTLCache(128, 3600), key=_robust_key)
 def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **params):
     if language:
         params['language'] = language
