@@ -148,7 +148,7 @@ All requests, except `get_series`, are cached using a _least recently used_ cach
 
 ## Using behind a proxy
 
-Using the package behind an http proxy is possible. Use either the `proxies` argument in the `get_*` functins, or set the proxy globally with e.g.:
+Using the package behind an http proxy is possible. Use either the `proxies` argument in the `get_*` functions, or set the proxy globally with e.g.:
 
 ```python
 wb.options.proxies = {'http': 'http://example.com:3128'}
