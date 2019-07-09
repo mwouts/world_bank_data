@@ -146,6 +146,14 @@ wb.options.language = 'en'
 
 All requests, except `get_series`, are cached using a _least recently used_ cache from the `cachetools` package.
 
+## Using behind a proxy
+
+Using the package behind an http proxy is possible. Use either the `proxies` argument in the `get_*` functins, or set the proxy globally with e.g.:
+
+```python
+wb.options.proxies = {'http': 'http://example.com:3128'}
+```
+
 ## License
 
 This python package is licenced under the MIT License.
