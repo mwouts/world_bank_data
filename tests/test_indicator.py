@@ -124,7 +124,12 @@ def test_random_indicators(indicator):
         assert 'The indicator was not found' in str(err)
 
 
-def test_json_error():
-    indicator = 'NV.IND.MANF.KD.87'
+def test_indicator_not_found(indicator='NV.IND.MANF.KD.87'):
     with pytest.raises(ValueError, match='The indicator was not found. It may have been deleted or archived.'):
         get_series(indicator, mrv=1)
+
+
+def test_incorrect_parameter(indicator='SE.ADT.1524.LT.MA.ZS', not_a_country='WLDUSA'):
+    # a comma is missing between WLD and USA
+    with pytest.raises(ValueError, match='not valid'):
+        get_series(indicator, country=not_a_country)
