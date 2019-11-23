@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import re
-import mock
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 from world_bank_data import search_countries
 
 

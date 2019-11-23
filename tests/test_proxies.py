@@ -1,6 +1,10 @@
-import mock
 import pytest
 import requests
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 from world_bank_data import get_countries
 
 
