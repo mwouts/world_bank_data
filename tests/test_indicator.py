@@ -1,6 +1,6 @@
 import pytest
 import numbers
-import random
+from requests import HTTPError
 from world_bank_data import get_indicators, get_series
 from .tools import assert_numeric_or_string
 from pandas.testing import assert_frame_equal
@@ -99,9 +99,14 @@ def test_indicator_monthly():
 
 
 def random_indicators():
-    random.seed(2019)
-    all_indicators = get_indicators()
-    return random.sample(all_indicators.index.tolist(), 12)
+    """Return a list of random indicators. This list was generated with
+random.seed(2019)
+all_indicators = get_indicators()
+random.sample(all_indicators.index.tolist(), 12)
+"""
+    return ['DT.TDS.MLTC.GG.CD', 'IC.FRM.INFRA.IN1', 'UIS.E.23.PR.F', 'EN.ATM.GHGO.ZG', 'IC.LGL.PROC',
+            'IN.ENV.COASTALZONE.FOREST.PCT', 'per_lm_ac.adq_q2_rur', 'LP.IMP.DURS.MD', 'RESLV.ISV.DB0414.DFRN',
+            'IC.ELC.SAID.XD.DB1619', 'SABER.PRVT.GOAL4.LVL5', 'SI.DST.FRST.10']
 
 
 @pytest.mark.parametrize('indicator', random_indicators())
@@ -109,6 +114,12 @@ def test_random_indicators(indicator):
     try:
         idx = get_series(indicator, mrv=1)
         assert_numeric_or_string(idx)
+    except HTTPError as err:
+        # Some indicators like RESLV.ISV.DB0414.DFRN contains no value at all, and
+        # because of that requests with mrv=1 fail.
+        assert 'Bad Request' in str(err)
+        idx = get_series(indicator)
+        assert all([val is None for val in idx.values])
     except ValueError as err:
         assert 'The indicator was not found' in str(err)
 
