@@ -6,9 +6,15 @@ from .tools import assert_numeric_or_string
 from pandas.testing import assert_frame_equal
 
 
-def test_indicators_one():
+def test_indicators_population():
     idx = get_indicators('SP.POP.TOTL')
     assert idx.index == ['SP.POP.TOTL']
+    assert_numeric_or_string(idx)
+
+
+def test_indicators_life_expectancy():
+    idx = get_indicators('SP.DYN.LE00.IN')
+    assert idx.index == ['SP.DYN.LE00.IN']
     assert_numeric_or_string(idx)
 
 
