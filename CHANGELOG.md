@@ -1,5 +1,11 @@
-Release History
-===============
+0.1.3+dev
+------------------
+
+**Changed**
+- Added GitHub code scanning
+- Removed Python 3.4 from the CI
+- Updated test `test_indicator_values` as the population estimate for 2017 was revisited
+
 
 0.1.3 (2019-07-10)
 ------------------
