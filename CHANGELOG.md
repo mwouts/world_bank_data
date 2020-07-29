@@ -1,6 +1,9 @@
 0.1.3+dev
 ------------------
 
+**Added**
+- `__version__` added to `world_bank_data` package
+
 **Changed**
 - Added GitHub code scanning
 - Configured codecov with `codecov.yml`
