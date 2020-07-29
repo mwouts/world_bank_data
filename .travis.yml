@@ -4,9 +4,8 @@ python:
   - "3.6"
   - "3.7"
   - "2.7"
-  - "3.4"
   - "3.5"
-  - "3.8-dev"
+  - "3.8"
 install:
   # command to install dependencies
   - pip install -r requirements-dev.txt
