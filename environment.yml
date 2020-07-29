@@ -1,0 +1,14 @@
+name: world-bank-data-dev
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - pandas
+  - requests
+  - cachetools
+  - mock
+  - pytest
+  - flake8
+  - plotly
+  - jupytext
+  - jupyter
