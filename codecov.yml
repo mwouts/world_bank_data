@@ -1,0 +1,15 @@
+codecov:
+    notify:
+        after_n_builds: 5  # wait for the 5 Travis jobs before notifying
+
+coverage:
+  status:
+    project:
+      default: false  # disable the default status that measures entire project
+      tests:
+        paths: "tests/"
+        target: 100%
+      source:
+        paths: "world_bank_data/"
+        target: 90%
+        threshold': 1%

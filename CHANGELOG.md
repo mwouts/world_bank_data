@@ -3,6 +3,7 @@
 
 **Changed**
 - Added GitHub code scanning
+- Configured codecov with `codecov.yml`
 - Removed Python 3.4 from the CI
 - Updated test `test_indicator_values` as the population estimate for 2017 was revisited
 
