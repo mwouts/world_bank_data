@@ -113,8 +113,8 @@ The World Bank data is also available in Google's [Data Explorer](https://data.w
 ## Python
 
 Alternatively to `world_bank_data`, Python users may find useful the following packages:
-- [`wbpy`](https://github.com/mattduck/wbpy/blob/master/README.rst), nicely documented but last released in 2013.
-- [`wbdata`](https://github.com/oliversherouse/wbdata/blob/master/README.rst), which works well.
+- [`wbpy`](https://github.com/mattduck/wbpy/), nicely documented and recently updated to Python 3 and the World Bank API v2.
+- [`wbdata`](https://github.com/oliversherouse/wbdata/), which works well.
 - [`pandas_datareader`](https://pandas-datareader.readthedocs.io/en/latest/readers/world-bank.html)
 
 The reason for which I wrote `world_bank_data` is mostly speed, e.g. I wanted to use the lastest version of the World Bank API (v2) and benefit from significant speed improvements. Reimplementing the API also gave me a finer control on the mapping of options.
