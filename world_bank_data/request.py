@@ -9,7 +9,7 @@ import pandas as pd
 from cachetools import cached, TTLCache, keys
 import world_bank_data.options as options
 
-WORLD_BANK_URL = 'http://api.worldbank.org/v2'
+WORLD_BANK_URL = 'https://api.worldbank.org/v2'
 
 
 class WBRequestError(HTTPError):
