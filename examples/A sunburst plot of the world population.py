@@ -16,7 +16,7 @@
 # In this notebook we use the new Sunburst plot by [plotly](http://plot.ly/) to illustrate how the World population
 # is splitted among regions and countries. The data set illustrated here originates from the
 # [World Bank](https://data.worldbank.org). This notebook is also a quick demo for the 
-# [world_bank_data](https://github.com/mwouts/world_bank_data/blob/master/README.md) Python package.
+# [world_bank_data](https://github.com/mwouts/world_bank_data/blob/main/README.md) Python package.
 
 # +
 import pandas as pd
