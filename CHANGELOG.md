@@ -2,7 +2,7 @@
 ------------------
 
 **Fixed**
-- We now use HTTPS as required by the world bank API ([#18](https://github.com/mwouts/world_bank_data/pulls/18)) - thanks to [John Cant](https://github.com/johncant) for fixing this!
+- We now use HTTPS as required by the world bank API ([#18](https://github.com/mwouts/world_bank_data/pull/18)) - thanks to [John Cant](https://github.com/johncant) for fixing this!
 
 **Added**
 - Added `__version__`

@@ -2,13 +2,9 @@
 
 [![CI](https://github.com/mwouts/world_bank_data/actions/workflows/continuous-integration.yml/badge.svg?branch=main)](https://github.com/mwouts/world_bank_data/actions)
 [![codecov.io](https://codecov.io/github/mwouts/world_bank_data/coverage.svg?branch=main)](https://codecov.io/github/mwouts/world_bank_data?branch=main)
-[![Language grade: Python](https://img.shields.io/badge/lgtm-A+-brightgreen.svg)](https://lgtm.com/projects/g/mwouts/world_bank_data/context:python)
 [![Pypi](https://img.shields.io/pypi/v/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
 [![pyversions](https://img.shields.io/pypi/pyversions/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
-[![Jupyter Notebook](https://img.shields.io/badge/Binder-Notebook-blue.svg)](
-    https://mybinder.org/v2/gh/mwouts/world_bank_data/main?filepath=examples%2FA%20sunburst%20plot%20of%20the%20world%20population.ipynb)
-[![JupyterLab](https://img.shields.io/badge/Binder-JupyterLab-blue.svg)](
-    https://mybinder.org/v2/gh/mwouts/world_bank_data/main?urlpath=lab)
+[![JupyterLab](https://img.shields.io/badge/Binder-JupyterLab-blue.svg)](https://mybinder.org/v2/gh/mwouts/world_bank_data/main?urlpath=lab)
 
 This is an implementation of the [World Bank API v2](https://datahelpdesk.worldbank.org/knowledgebase/articles/889386-developer-information-overview) in Python. Use this package to explore the [World Development Indicators](http://datatopics.worldbank.org/world-development-indicators/) published by the [World Bank](http://www.worldbank.org/).
 
@@ -94,9 +90,9 @@ wb.get_series('SP.POP.TOTL', date='2016', id_or_value='id', simplify_index=True)
 
 ## Ready for an interative tutorial?
 
-Go to our [Binder](https://mybinder.org/v2/gh/mwouts/world_bank_data/main) and run either this [README](https://github.com/mwouts/world_bank_data/blob/main/README.md), or our other [tutorial](https://github.com/mwouts/world_bank_data/blob/main/examples/) with the code required to produce this plot of the World Population:
+Go to our Binder and run either this [README](https://mybinder.org/v2/gh/mwouts/world_bank_data/main?labpath=README.md) or the notebook under `examples` to reproduce produce this plot of the World Population:
 
-[![World Population 2017](https://gist.githubusercontent.com/mwouts/ec3a88f1d97e36a062f69d4072b91e39/raw/79211a09957c6934fabf738a59c2c9b8df943696/world_population.gif)](https://nbviewer.jupyter.org/github/mwouts/world_bank_data/blob/main/examples/A%20sunburst%20plot%20of%20the%20world%20population.ipynb)
+[![World Population 2017](https://gist.githubusercontent.com/mwouts/ec3a88f1d97e36a062f69d4072b91e39/raw/79211a09957c6934fabf738a59c2c9b8df943696/world_population.gif)](https://mybinder.org/v2/gh/mwouts/world_bank_data/main?labpath=examples/A%20sunburst%20plot%20of%20the%20world%20population.py)
 
 # References
 
