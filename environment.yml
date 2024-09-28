@@ -12,3 +12,4 @@ dependencies:
   - plotly
   - jupytext
   - jupyter
+  - hatch
