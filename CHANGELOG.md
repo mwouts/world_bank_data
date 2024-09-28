@@ -1,14 +1,15 @@
-0.1.3+dev
+0.1.4-dev (2024-09-??)
 ------------------
 
+**Fixed**
+- We now use HTTPS as required by the world bank API ([#18](https://github.com/mwouts/world_bank_data/pulls/18)) - thanks to [John Cant](https://github.com/johncant) for fixing this!
+
 **Added**
-- `__version__` added to `world_bank_data` package
+- Added `__version__` to `world_bank_data` package
 
 **Changed**
-- Added GitHub code scanning
-- Configured codecov with `codecov.yml`
+- Added continuous integration and code scanning
 - Removed Python 3.4 from the CI
-- Updated test `test_indicator_values` as the population estimate for 2017 was revisited
 
 
 0.1.3 (2019-07-10)
