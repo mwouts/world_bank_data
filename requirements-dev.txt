@@ -1,5 +1,0 @@
-flake8
-pytest
-pytest-cov==2.5.1
-codecov
-jupytext

@@ -20,11 +20,12 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
     "cachetools",
@@ -32,13 +33,33 @@ dependencies = [
     "requests",
 ]
 
+[project.optional-dependencies]
+test = [
+  # Pytest
+  "pytest",
+  "pytest-cov",
+]
+
 [project.urls]
 Homepage = "https://github.com/mwouts/world_bank_data"
 
 [tool.hatch.version]
-path = "world_bank_data/__init__.py"
+path = "world_bank_data/version.py"
 
 [tool.hatch.build.targets.sdist]
 include = [
     "/world_bank_data",
 ]
+
+[pycodestyle]
+max-line-length = 127
+
+[tool.coverage.report]
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise NotImplementedError",
+    "except ImportError",
+  ]
