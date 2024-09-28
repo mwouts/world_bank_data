@@ -1,3 +1,5 @@
+import pytest
+
 from world_bank_data import get_regions
 from .tools import assert_numeric_or_string
 
@@ -21,6 +23,7 @@ def test_one_region_list():
     assert_numeric_or_string(reg)
 
 
+@pytest.mark.xfail(reason="The provided parameter value is not valid")
 def test_two_regions():
     reg = get_regions(['AFR', 'ANR'])
     assert 'id' not in reg.columns
