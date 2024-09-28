@@ -1,5 +1,7 @@
 """Search in a table"""
+
 import re
+
 import pandas as pd
 
 
@@ -8,15 +10,17 @@ def search(table, pattern, columns=None):
     assert isinstance(table, pd.DataFrame), "'table' must be a Pandas DataFrame"
 
     if columns is None:
-        columns = [col for col in table.columns if table[col].dtype.kind == 'O']
+        columns = [col for col in table.columns if table[col].dtype.kind == "O"]
 
     if not columns:
-        raise ValueError('Please specific a non-empty columns arguments, and run the search '
-                         'on a table that has string columns')
+        raise ValueError(
+            "Please specific a non-empty columns arguments, and run the search "
+            "on a table that has string columns"
+        )
 
     if isinstance(pattern, str):
-        if not pattern.startswith('.*'):
-            pattern = '.*(' + pattern + ')'
+        if not pattern.startswith(".*"):
+            pattern = ".*(" + pattern + ")"
         pattern = re.compile(pattern, re.IGNORECASE)
 
     found = pd.Series(0, index=table.index)

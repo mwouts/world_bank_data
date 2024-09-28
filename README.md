@@ -57,7 +57,7 @@ to retrieve more information about country classifiers.
 
 ## Get the list of indicators
 
-This is done with the `get_indicators` function. You may query only the indicators for a specific source or topic as below. If you input no arguments, the `get_indicator` function will return the description of all the 16,000+ indicators. 
+This is done with the `get_indicators` function. You may query only the indicators for a specific source or topic as below. If you input no arguments, the `get_indicator` function will return the description of all the 16,000+ indicators.
 
 ```python
 wb.get_indicators(topic=3, source=2)  # topic and source id are from get_topics/get_sources
@@ -122,7 +122,7 @@ The reason for which I wrote `world_bank_data` is mostly speed, e.g. I wanted to
 ## R
 
 R users can use two packages to access the World Bank data:
-- [`WDI`](https://github.com/vincentarelbundock/WDI/blob/master/README.md) 
+- [`WDI`](https://github.com/vincentarelbundock/WDI/blob/master/README.md)
 - [`wbstats`](https://github.com/GIST-ORNL/wbstats/blob/master/README.md)
 
 See also the [Introduction to the wbstats R-package](https://cran.r-project.org/web/packages/wbstats/vignettes/Using_the_wbstats_package.html), or this [quick review](https://cengel.github.io/gearup2016/worldbank.html) of the two packages.
