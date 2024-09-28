@@ -1,6 +1,7 @@
 codecov:
-    notify:
-        after_n_builds: 5  # wait for the 5 Travis jobs before notifying
+  token: 0aa5a6c3-d2ca-46c4-8c1f-0b1646a75e04
+  notify:
+    wait_for_ci: true
 
 coverage:
   status:
