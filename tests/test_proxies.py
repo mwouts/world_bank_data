@@ -1,4 +1,4 @@
-import mock
+from unittest import mock
 import pytest
 import requests
 from world_bank_data import get_countries
