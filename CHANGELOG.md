@@ -1,15 +1,16 @@
-0.1.4-dev (2024-09-??)
+0.1.4 (2024-09-28)
 ------------------
 
 **Fixed**
 - We now use HTTPS as required by the world bank API ([#18](https://github.com/mwouts/world_bank_data/pulls/18)) - thanks to [John Cant](https://github.com/johncant) for fixing this!
 
 **Added**
-- Added `__version__` to `world_bank_data` package
+- Added `__version__`
+- We use GitHub Actions for CI
+- We use `pre-commit` for code formatting
 
 **Changed**
-- Added continuous integration and code scanning
-- Removed Python 3.4 from the CI
+- The package can be used with Python 3.7 to 3.12
 
 
 0.1.3 (2019-07-10)
