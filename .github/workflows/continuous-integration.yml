@@ -1,0 +1,80 @@
+name: CI
+on:
+  push:
+    paths-ignore:
+      - 'CHANGELOG.md'
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 11 * * 4'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  pytest:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.7, 3.8, 3.9, "3.10", "3.11", "3.12"]
+        pandas-version: [latest]
+        numpy-version: [latest]
+        include:
+          - python-version: 3.7
+            pandas-version: '<1.0'
+          - python-version: 3.9
+            pandas-version: '<2.0'
+            numpy-version: '<2.0'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install a development version
+        run: pip install -e .[test]
+
+      - name: Install pandas latest
+        if: matrix.pandas-version == 'latest'
+        run: pip install pandas
+      - name: Install pandas pre-release
+        if: matrix.pandas-version == 'pre'
+        run: pip install pandas --pre
+      - name: Install pandas ${{ matrix.pandas-version }}
+        if: matrix.pandas-version != 'pre' && matrix.pandas-version != 'latest'
+        run: pip install 'pandas${{ matrix.pandas-version }}'
+      - name: Install numpy ${{ matrix.numpy-version }}
+        if: matrix.numpy-version != 'latest'
+        run: pip install 'numpy${{ matrix.numpy-version }}'
+
+      - name: Test with pytest
+        run: pytest --cov=./ --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+          verbose: true
