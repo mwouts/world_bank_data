@@ -11,6 +11,8 @@ dependencies:
   - pytest
   - pytest-cov
   - pytest-xdist
+  # pre-commits
+  - pre-commit
   # build
   - hatch
   # Jupyter
