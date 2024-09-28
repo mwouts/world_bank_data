@@ -1,4 +1,5 @@
-world_bank_data
-plotly>=3.8
+itables
+plotly
 jupytext
-jupyter_contrib_nbextensions
+jupyterlab_execute_time
+jupyter-resource-usage

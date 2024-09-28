@@ -1,9 +1,15 @@
-#!/bin/bash
-set -ex
+# Stop everything if one command fails
+set -e
 
-# Trust our notebooks
-jupyter trust examples/*.ipynb
+# Install from source
+pip install .
 
-# TOC extension
-jupyter contrib nbextension install --user
-jupyter nbextension enable toc2/main
+# Open text notebooks with the Notebook editor
+mkdir -p ${HOME}/.jupyter/labconfig
+cp binder/labconfig/* ${HOME}/.jupyter/labconfig
+
+# Install a kernel called world_bank_data
+python -m ipykernel install --name world_bank_data --user
+
+# Use that kernel for the README and the example notebooks
+jupytext README.md examples/* --set-kernel world_bank_data

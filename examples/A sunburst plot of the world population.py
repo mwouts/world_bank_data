@@ -1,55 +1,49 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py:light
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
-#       format_name: light
-#       format_version: '1.4'
-#       jupytext_version: 1.2.0-rc1
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.16.1
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
 
+# %% [markdown]
 # In this notebook we use the new Sunburst plot by [plotly](http://plot.ly/) to illustrate how the World population
 # is splitted among regions and countries. The data set illustrated here originates from the
 # [World Bank](https://data.worldbank.org). This notebook is also a quick demo for the
 # [world_bank_data](https://github.com/mwouts/world_bank_data/blob/main/README.md) Python package.
 
-# +
+# %%
 import pandas as pd
-import plotly
-import plotly.offline as offline
+import plotly.graph_objects as go
+from itables import init_notebook_mode
 
 import world_bank_data as wb
 
+init_notebook_mode(all_interactive=True)
 
-def version_to_int_list(version):
-    return [int(s) for s in version.split(".")]
-
-
-assert version_to_int_list(plotly.__version__) >= version_to_int_list(
-    "3.8.0"
-), "Sunburst plots require Plotly >= 3.8.0"
-
-pd.set_option("display.max_rows", 12)
-offline.init_notebook_mode()
-# -
-
+# %%
 # Countries and associated regions
 countries = wb.get_countries()
 countries
 
+# %%
 # Population dataset, by the World Bank (most recent value)
 population = wb.get_series("SP.POP.TOTL", mrv=1)
 population
 
+# %%
 # Same data set, indexed with the country code
 population = wb.get_series("SP.POP.TOTL", id_or_value="id", simplify_index=True, mrv=1)
 population
 
+# %%
 # Aggregate region, country and population
 df = (
     countries[["region", "name"]]
@@ -59,7 +53,7 @@ df = (
 df["population"] = population
 df
 
-# +
+# %%
 # The sunburst plot requires weights (values), labels, and parent (region, or World)
 # We build the corresponding table here
 columns = ["parents", "labels", "values"]
@@ -90,17 +84,14 @@ level3 = pd.DataFrame(
 
 all_levels = pd.concat([level1, level2, level3], axis=0).reset_index(drop=True)
 all_levels
-# -
 
+# %%
 # And now we can plot the World Population
-offline.iplot(
-    dict(
-        data=[dict(type="sunburst", hoverinfo="text", **all_levels)],
-        layout=dict(
-            title="World Population (World Bank, 2017)<br>Click on a region to zoom",
-            width=800,
-            height=800,
-        ),
+go.Figure(
+    data=[go.Sunburst(hoverinfo="text", **all_levels)],
+    layout=dict(
+        title="World Population (World Bank, 2017)<br>Click on a region to zoom",
+        width=800,
+        height=800,
     ),
-    validate=False,
 )
