@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Request the world bank API"""
 
 import json
@@ -85,9 +83,7 @@ def wb_get(*args, **kwargs):
         except (KeyError, IndexError):
             msg = str(msg)
 
-        raise ValueError(
-            "{msg}\nurl={url}\nparams={params}".format(msg=msg, url=url, params=params)
-        )
+        raise ValueError(f"{msg}\nurl={url}\nparams={params}")
 
     # Redo the request and get the full information when the first response is incomplete
     if params["format"] == "json" and isinstance(data, list):

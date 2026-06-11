@@ -60,7 +60,7 @@ columns = ["parents", "labels", "values"]
 
 level1 = df.copy()
 level1.columns = columns
-level1["text"] = level1["values"].apply(lambda pop: "{:,.0f}".format(pop))
+level1["text"] = level1["values"].apply(lambda pop: f"{pop:,.0f}")
 
 level2 = (
     df.groupby("region")
@@ -70,7 +70,7 @@ level2 = (
 level2.columns = columns
 level2["parents"] = "World"
 # move value to text for this level
-level2["text"] = level2["values"].apply(lambda pop: "{:,.0f}".format(pop))
+level2["text"] = level2["values"].apply(lambda pop: f"{pop:,.0f}")
 level2["values"] = 0
 
 level3 = pd.DataFrame(

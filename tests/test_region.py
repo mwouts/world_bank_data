@@ -28,7 +28,7 @@ def test_one_region_list():
 def test_two_regions():
     reg = get_regions(["AFR", "ANR"])
     assert "id" not in reg.columns
-    assert set(reg.index) == set(["AFR", "ANR"])
+    assert set(reg.index) == {"AFR", "ANR"}
     assert_numeric_or_string(reg)
 
 
