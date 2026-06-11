@@ -1,3 +1,13 @@
+0.2.0 (2026-06-11)
+------------------
+
+**Changed**
+- The development environment is now managed with [pixi](https://pixi.sh) (see the `[tool.pixi]` tables in `pyproject.toml`)
+- The package is tested with Python 3.10 to 3.14. Support for Python 3.7, 3.8 and 3.9 (all end-of-life) was dropped
+- Updated the pre-commit hooks: `black` and `isort` were replaced by `ruff` and `ruff-format`
+- Updated the GitHub Actions (newer action versions, and pixi-based CI jobs)
+
+
 0.1.4 (2024-09-28)
 ------------------
 

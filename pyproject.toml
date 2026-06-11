@@ -20,13 +20,13 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
+requires-python = ">= 3.10"
 dependencies = [
     "cachetools",
     "pandas",
@@ -63,3 +63,45 @@ exclude_lines = [
     "raise NotImplementedError",
     "except ImportError",
   ]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
+# Use a local (empty) conda<->PyPI name map so locking works without reaching the
+# remote mapping service. The only PyPI dependency is the editable self-install,
+# and every conda dependency shares its PyPI name, so no overrides are needed.
+conda-pypi-map = { conda-forge = ".github/conda-pypi-map.json" }
+
+[tool.pixi.pypi-dependencies]
+world-bank-data = { path = ".", extras = ["test"], editable = true }
+
+[tool.pixi.dependencies]
+pandas = "*"
+requests = "*"
+cachetools = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+pre-commit = "*"
+hatch = "*"
+
+[tool.pixi.tasks]
+
+[tool.pixi.feature.notebook.dependencies]
+jupyterlab = ">=4"
+plotly = "*"
+jupytext = "*"
+
+[tool.pixi.feature.build.dependencies]
+python-build = "*"
+twine = "*"
+
+[tool.pixi.feature.build.tasks]
+# pixi run -e build publish-test
+build-dist = "rm -rf dist && python -m build"
+publish-test = { depends-on = ["build-dist"], cmd = "twine upload --repository testpypi dist/*" }
+
+[tool.pixi.environments]
+default = { solve-group = "default" }
+notebook = { features = ["notebook"], solve-group = "default" }
+build = { features = ["build"], solve-group = "default" }

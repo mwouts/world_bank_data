@@ -4,26 +4,25 @@
 repos:
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
     - id: check-json
     - id: check-yaml
     - id: end-of-file-fixer
     - id: trailing-whitespace
 
-  - repo: https://github.com/timothycrosley/isort
-    rev: 5.13.2
-    hooks:
-    - id: isort
-      args: ["--profile", "black", "--filter-files"]
-
-  - repo: https://github.com/psf/black
-    rev: 24.8.0
-    hooks:
-    - id: black
-
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.8
+    rev: v0.15.11
     hooks:
       - id: ruff
         args: ["--fix", "--show-fixes"]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: pixi-update-lock
+        name: Update pixi.lock file
+        entry: pixi lock
+        language: system
+        pass_filenames: false
+        files: ^(pyproject\.toml|pixi\.lock)$
