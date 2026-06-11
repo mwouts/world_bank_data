@@ -1,5 +1,10 @@
 """Get indicators and their values"""
 
+from __future__ import annotations
+
+import re
+from typing import Any
+
 import numpy as np
 import pandas as pd
 
@@ -9,7 +14,12 @@ from .request import wb_get, wb_get_table
 from .search import search
 
 
-def get_indicators(indicator=None, language=None, id_or_value=None, **params):
+def get_indicators(
+    indicator: str | list[str] | None = None,
+    language: str | None = None,
+    id_or_value: str | None = None,
+    **params: Any,
+) -> pd.DataFrame:
     """Return a DataFrame that describes one, multiple or all indicators, indexed by the indicator id.
     :param indicator: None (all indicators), the id of an indicator, or a list of multiple ids
     :param language: Desired language
@@ -29,7 +39,11 @@ def get_indicators(indicator=None, language=None, id_or_value=None, **params):
     )
 
 
-def search_indicators(pattern, language=None, **kwargs):
+def search_indicators(
+    pattern: str | re.Pattern[str],
+    language: str | None = None,
+    **kwargs: Any,
+) -> pd.DataFrame:
     """Search the indicators that match the given pattern
     :param pattern: a string or a regular expression
     :param language: the desired language
@@ -38,8 +52,12 @@ def search_indicators(pattern, language=None, **kwargs):
 
 
 def get_series(
-    indicator, country=None, id_or_value=None, simplify_index=False, **params
-):
+    indicator: str,
+    country: str | list[str] | None = None,
+    id_or_value: str | None = None,
+    simplify_index: bool = False,
+    **params: Any,
+) -> pd.Series | Any:
     """Return a Series with the indicator data.
     :param indicator: Indicator code (see indicators())
     :param country: None (all countries), the id of a country, or a list of multiple country codes
@@ -81,7 +99,7 @@ def get_series(
     return pd.Series(value, index=index, name=indicator)
 
 
-def _parse_category(cat, use_labels):
+def _parse_category(cat: dict[str, Any], use_labels: bool) -> pd.Series:
     name = cat["label"]
     cat = cat["category"]
 

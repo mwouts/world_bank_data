@@ -25,6 +25,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
 ]
 requires-python = ">= 3.10"
 dependencies = [
@@ -49,6 +50,12 @@ path = "world_bank_data/version.py"
 [tool.hatch.build.targets.sdist]
 include = [
     "/world_bank_data",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["world_bank_data"]
+artifacts = [
+    "world_bank_data/py.typed",
 ]
 
 [pycodestyle]

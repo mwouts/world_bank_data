@@ -1,8 +1,11 @@
 """Request the world bank API"""
 
+from __future__ import annotations
+
 import json
 import re
 from copy import copy
+from typing import Any
 
 import pandas as pd
 from cachetools import TTLCache, cached, keys
@@ -17,7 +20,7 @@ class WBRequestError(HTTPError):
     """An error occured when downloading the WB data"""
 
 
-def collapse(values):
+def collapse(values: Any) -> str:
     """Collapse multiple values to a colon-separated list of values"""
     if isinstance(values, str):
         return values
@@ -28,7 +31,7 @@ def collapse(values):
     return str(values)
 
 
-def extract_preferred_field(data, id_or_value):
+def extract_preferred_field(data: Any, id_or_value: str | None) -> Any:
     """In case the preferred representation of data when the latter has multiple representations"""
     if not id_or_value:
         return data
@@ -46,7 +49,7 @@ def extract_preferred_field(data, id_or_value):
     return data
 
 
-def wb_get(*args, **kwargs):
+def wb_get(*args: Any, **kwargs: Any) -> Any:
     """Request the World Bank for the desired information"""
     params = copy(kwargs)
     language = params.pop("language", "en")
@@ -107,7 +110,7 @@ def wb_get(*args, **kwargs):
     return data
 
 
-def _extract_message(msg):
+def _extract_message(msg: str) -> str:
     """'ï»¿<?xml version="1.0" encoding="utf-8"?>
     <wb:error xmlns:wb="http://www.worldbank.org">
       <wb:message id="175" key="Invalid format">The indicator was not found. It may have been deleted or archived.</wb:message>
@@ -121,14 +124,20 @@ def _extract_message(msg):
     )
 
 
-def _robust_key(*args, **kwargs):
+def _robust_key(*args: Any, **kwargs: Any) -> tuple[Any, ...]:
     if "proxies" in kwargs:
         kwargs["proxies"] = json.dumps(kwargs["proxies"])
     return keys.hashkey(*args, **kwargs)
 
 
 @cached(TTLCache(128, 3600), key=_robust_key)
-def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **params):
+def _wb_get_table_cached(
+    name: str,
+    only: str | None = None,
+    language: str | None = None,
+    id_or_value: str | None = None,
+    **params: Any,
+) -> pd.DataFrame:
     if language:
         params["language"] = language
     data = wb_get(name, only, **params)
@@ -150,8 +159,13 @@ def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **par
 
 
 def wb_get_table(
-    name, only=None, language=None, id_or_value=None, expected=None, **params
-):
+    name: str,
+    only: str | list[str] | None = None,
+    language: str | None = None,
+    id_or_value: str | None = None,
+    expected: list[str] | None = None,
+    **params: Any,
+) -> pd.DataFrame:
     """Request data and return it in the form of a data frame"""
     only = collapse(only)
     id_or_value = id_or_value or options.id_or_value

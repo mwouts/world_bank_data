@@ -1,6 +1,9 @@
 0.1.5 (2026-06-11)
 ------------------
 
+**Added**
+- Type hints on the public API (and a `py.typed` marker so they are available to users)
+
 **Changed**
 - The development environment is now managed with [pixi](https://pixi.sh) (see the `[tool.pixi]` tables in `pyproject.toml`)
 - The package is tested with Python 3.10 to 3.14. Support for Python 3.7, 3.8 and 3.9 (all end-of-life) was dropped

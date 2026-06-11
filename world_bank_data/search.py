@@ -1,11 +1,17 @@
 """Search in a table"""
 
+from __future__ import annotations
+
 import re
 
 import pandas as pd
 
 
-def search(table, pattern, columns=None):
+def search(
+    table: pd.DataFrame,
+    pattern: str | re.Pattern[str],
+    columns: list[str] | None = None,
+) -> pd.DataFrame:
     """Return the rows of the table for which a column matches the pattern"""
     assert isinstance(table, pd.DataFrame), "'table' must be a Pandas DataFrame"
 

@@ -1,12 +1,22 @@
 """Get country information"""
 
+from __future__ import annotations
+
+import re
+from typing import Any
+
 import pandas as pd
 
 from .request import wb_get_table
 from .search import search
 
 
-def get_countries(country=None, language=None, id_or_value=None, **params):
+def get_countries(
+    country: str | list[str] | None = None,
+    language: str | None = None,
+    id_or_value: str | None = None,
+    **params: Any,
+) -> pd.DataFrame:
     """Return a DataFrame that describes one, multiple or all countries, indexed by the country id.
     :param country: None (all countries), the id of a country, or a list of multiple ids
     :param language: Desired language
@@ -28,7 +38,11 @@ def get_countries(country=None, language=None, id_or_value=None, **params):
     return table
 
 
-def search_countries(pattern, language=None, **kwargs):
+def search_countries(
+    pattern: str | re.Pattern[str],
+    language: str | None = None,
+    **kwargs: Any,
+) -> pd.DataFrame:
     """Search for the given pattern in the list of countries
     :param pattern: a string or a regular expression
     :param language: Desired language
