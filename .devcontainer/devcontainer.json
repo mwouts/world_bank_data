@@ -22,9 +22,10 @@
                 "ms-python.python",
                 "ms-pyright.pyright",
                 "charliermarsh.ruff",
+                "openai.chatgpt",
                 "ms-toolsai.jupyter",
                 "caenrigen.jupytext-sync",
-                "jjjermiah.pixi-vscode"
+                "renan-r-santos.pixi-code"
             ],
             "settings": {
                 "python.defaultInterpreterPath": "${workspaceFolder}/.pixi/envs/default/bin/python",
