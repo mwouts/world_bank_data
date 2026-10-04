@@ -45,11 +45,7 @@ population
 
 # %%
 # Aggregate region, country and population
-df = (
-    countries[["region", "name"]]
-    .rename(columns={"name": "country"})
-    .loc[countries.region != "Aggregates"]
-)
+df = countries[["region", "name"]].rename(columns={"name": "country"}).loc[countries.region != "Aggregates"]
 df["population"] = population
 df
 
@@ -60,17 +56,13 @@ columns = ["parents", "labels", "values"]
 
 level1 = df.copy()
 level1.columns = columns
-level1["text"] = level1["values"].apply(lambda pop: "{:,.0f}".format(pop))
+level1["text"] = level1["values"].apply(lambda pop: f"{pop:,.0f}")
 
-level2 = (
-    df.groupby("region")
-    .population.sum()
-    .reset_index()[["region", "region", "population"]]
-)
+level2 = df.groupby("region").population.sum().reset_index()[["region", "region", "population"]]
 level2.columns = columns
 level2["parents"] = "World"
 # move value to text for this level
-level2["text"] = level2["values"].apply(lambda pop: "{:,.0f}".format(pop))
+level2["text"] = level2["values"].apply(lambda pop: f"{pop:,.0f}")
 level2["values"] = 0
 
 level3 = pd.DataFrame(
