@@ -14,8 +14,7 @@ def search(table, pattern, columns=None):
 
     if not columns:
         raise ValueError(
-            "Please specific a non-empty columns arguments, and run the search "
-            "on a table that has string columns"
+            "Please specific a non-empty columns arguments, and run the search on a table that has string columns"
         )
 
     if isinstance(pattern, str):

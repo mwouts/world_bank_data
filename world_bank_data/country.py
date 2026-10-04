@@ -14,12 +14,7 @@ def get_countries(country=None, language=None, id_or_value=None, **params):
     """
 
     table = wb_get_table(
-        "country",
-        country,
-        language=language,
-        id_or_value=id_or_value,
-        expected=["id", "iso2code", "value"],
-        **params
+        "country", country, language=language, id_or_value=id_or_value, expected=["id", "iso2code", "value"], **params
     )
 
     for col in ["latitude", "longitude"]:

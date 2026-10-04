@@ -150,6 +150,20 @@ Using the package behind an http proxy is possible. Use either the `proxies` arg
 wb.options.proxies = {'http': 'http://example.com:3128'}
 ```
 
+# Development
+
+Install [Pixi](https://pixi.sh/) and run the project checks with:
+
+```bash
+pixi install
+pixi run lint
+pixi run typecheck
+pixi run test
+pixi run build
+```
+
+Run all checks with `pixi run check`.
+
 ## License
 
 This python package is licenced under the MIT License.

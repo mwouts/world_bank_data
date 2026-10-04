@@ -7,6 +7,7 @@ name = "world-bank-data"
 dynamic = ["version"]
 description = "World Bank Data API in Python"
 readme = "README.md"
+requires-python = ">=3.7"
 license = "MIT"
 authors = [
     { name = "Marc Wouts", email = "marc.wouts@gmail.com" },
@@ -53,6 +54,46 @@ include = [
 
 [pycodestyle]
 max-line-length = 127
+
+[tool.ruff]
+line-length = 127
+target-version = "py37"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.pyright]
+pythonVersion = "3.9"
+typeCheckingMode = "basic"
+venvPath = ".pixi/envs"
+venv = "default"
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
+
+[tool.pixi.dependencies]
+python = ">=3.9,<3.13"
+cachetools = "*"
+hatch = "*"
+pandas = "*"
+pre-commit = ">=4.3"
+pyright = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+python-build = "*"
+requests = "*"
+
+[tool.pixi.pypi-dependencies]
+world-bank-data = { path = ".", editable = true, extras = ["test"] }
+
+[tool.pixi.tasks]
+test = "pytest --cov=world_bank_data --cov-report=term-missing"
+lint = "pre-commit run --all-files"
+typecheck = "pyright world_bank_data"
+build = "python -m build"
+check = { depends-on = ["lint", "typecheck", "test", "build"] }
 
 [tool.coverage.report]
 exclude_lines = [

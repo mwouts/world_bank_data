@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Request the world bank API"""
+
 import json
 import re
 from copy import copy
@@ -42,7 +41,7 @@ def extract_preferred_field(data, id_or_value):
             return data[id_or_value]
 
     if isinstance(data, list):
-        return ",".join([extract_preferred_field(i, id_or_value) for i in data])
+        return ",".join(str(extract_preferred_field(i, id_or_value)) for i in data)
 
     return data
 
@@ -56,37 +55,31 @@ def wb_get(*args, **kwargs):
     params.setdefault("per_page", 20000)
 
     # collapse the list of countries to a single str
-    if len(args) > 1:
-        args = list(args)
-        args[1] = collapse(args[1])
+    path = list(args)
+    if len(path) > 1:
+        path[1] = collapse(path[1])
 
     if "topic" in params:
-        args = ["topic", str(params.pop("topic"))] + args
+        path = ["topic", str(params.pop("topic"))] + path
 
     if language != "en":
-        args = [language] + args
+        path.insert(0, language)
 
-    url = "/".join([WORLD_BANK_URL] + args)
+    url = "/".join([WORLD_BANK_URL] + [str(part) for part in path])
 
     response = get(url=url, params=params, proxies=proxies)
     response.raise_for_status()
     try:
         data = response.json()
     except ValueError:  # simplejson.errors.JSONDecodeError derives from ValueError
-        raise ValueError(
-            "{msg}\nurl={url}\nparams={params}".format(
-                msg=_extract_message(response.text), url=url, params=params
-            )
-        )
+        raise ValueError(f"{_extract_message(response.text)}\nurl={url}\nparams={params}")
     if isinstance(data, list) and data and "message" in data[0]:
         try:
             msg = data[0]["message"][0]["value"]
         except (KeyError, IndexError):
-            msg = str(msg)
+            msg = str(data[0])
 
-        raise ValueError(
-            "{msg}\nurl={url}\nparams={params}".format(msg=msg, url=url, params=params)
-        )
+        raise ValueError(f"{msg}\nurl={url}\nparams={params}")
 
     # Redo the request and get the full information when the first response is incomplete
     if params["format"] == "json" and isinstance(data, list):
@@ -101,11 +94,7 @@ def wb_get(*args, **kwargs):
                 data.extend(new_data)
 
     if not data:
-        raise RuntimeError(
-            "The request returned no data:\nurl={url}\nparams={params}".format(
-                url=url, params=params
-            )
-        )
+        raise RuntimeError(f"The request returned no data:\nurl={url}\nparams={params}")
 
     return data
 
@@ -145,25 +134,19 @@ def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **par
 
     table = pd.DataFrame(table, columns=columns)
 
-    if table["id"].any():
+    if bool(table["id"].any()):
         return table.set_index("id")
 
     table.pop("id")
     return table.set_index("code")
 
 
-def wb_get_table(
-    name, only=None, language=None, id_or_value=None, expected=None, **params
-):
+def wb_get_table(name, only=None, language=None, id_or_value=None, expected=None, **params):
     """Request data and return it in the form of a data frame"""
     only = collapse(only)
     id_or_value = id_or_value or options.id_or_value
 
     if expected and id_or_value not in expected:
-        raise ValueError(
-            "'id_or_value' should be one of '{}'".format("', '".join(expected))
-        )
+        raise ValueError("'id_or_value' should be one of '{}'".format("', '".join(expected)))
 
-    return _wb_get_table_cached(
-        name, only, language or options.language, id_or_value, **params
-    )
+    return _wb_get_table_cached(name, only, language or options.language, id_or_value, **params)

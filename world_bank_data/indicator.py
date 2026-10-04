@@ -19,14 +19,7 @@ def get_indicators(indicator=None, language=None, id_or_value=None, **params):
     if id_or_value == "iso2code":
         id_or_value = "id"
 
-    return wb_get_table(
-        "indicator",
-        indicator,
-        language=language,
-        id_or_value=id_or_value,
-        expected=["id", "value"],
-        **params
-    )
+    return wb_get_table("indicator", indicator, language=language, id_or_value=id_or_value, expected=["id", "value"], **params)
 
 
 def search_indicators(pattern, language=None, **kwargs):
@@ -37,9 +30,7 @@ def search_indicators(pattern, language=None, **kwargs):
     return search(get_indicators(language=language, **kwargs), pattern)
 
 
-def get_series(
-    indicator, country=None, id_or_value=None, simplify_index=False, **params
-):
+def get_series(indicator, country=None, id_or_value=None, simplify_index=False, **params):
     """Return a Series with the indicator data.
     :param indicator: Indicator code (see indicators())
     :param country: None (all countries), the id of a country, or a list of multiple country codes
@@ -50,16 +41,15 @@ def get_series(
     id_or_value = id_or_value or options.id_or_value
     params["format"] = "jsonstat"
 
-    idx = wb_get("country", country, "indicator", indicator, **params)
-    _, idx = idx.popitem()
+    response = wb_get("country", country, "indicator", indicator, **params)
+    if not isinstance(response, dict):
+        raise ValueError("Expected a JSON-stat object from the World Bank API")
+    _, idx = response.popitem()
 
     dimension = idx.pop("dimension")
     value = idx.pop("value")
 
-    index = [
-        _parse_category(dimension[dim], id_or_value == "value")
-        for dim in dimension["id"]
-    ]
+    index = [_parse_category(dimension[dim], id_or_value == "value") for dim in dimension["id"]]
     if not id_or_value:
         for idx, name in zip(index, dimension["id"]):
             idx.name = name

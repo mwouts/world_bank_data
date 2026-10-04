@@ -1,3 +1,14 @@
+0.2.0 (2026-10-04)
+------------------
+
+**Added**
+- Added a Pixi-managed development environment with lint, typecheck, test, and build tasks.
+- Added zizmor auditing and pinned GitHub Actions to immutable commit SHAs.
+
+**Changed**
+- Fixed request and response handling issues identified by Pyright.
+
+
 0.1.4 (2024-09-28)
 ------------------
 
