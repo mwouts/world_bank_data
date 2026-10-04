@@ -4,6 +4,9 @@
         "dockerfile": "Dockerfile",
         "context": "."
     },
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
     "remoteUser": "vscode",
     "mounts": [
         "source=${devcontainerId}-pixi,target=${containerWorkspaceFolder}/.pixi,type=volume"
