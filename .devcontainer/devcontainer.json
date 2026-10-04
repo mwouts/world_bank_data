@@ -18,7 +18,10 @@
             "extensions": [
                 "ms-python.python",
                 "ms-pyright.pyright",
-                "charliermarsh.ruff"
+                "charliermarsh.ruff",
+                "ms-toolsai.jupyter",
+                "caenrigen.jupytext-sync",
+                "jjjermiah.pixi-vscode"
             ],
             "settings": {
                 "python.defaultInterpreterPath": "${workspaceFolder}/.pixi/envs/default/bin/python",
