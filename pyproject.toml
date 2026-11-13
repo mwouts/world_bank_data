@@ -77,6 +77,7 @@ ipykernel = "*"
 jupyterlab = "*"
 pre-commit = "*"
 pip = ">=26.2.2,<27"
+pyright = ">=1.1.414,<2"
 
 [tool.pixi.pypi-dependencies]
 world-bank-data = { path = ".", editable = true, extras = ["dev"] }
@@ -85,3 +86,8 @@ world-bank-data = { path = ".", editable = true, extras = ["dev"] }
 test = "pytest tests"
 lint = "pre-commit run --all-files"
 build = "python -m build"
+typecheck = "pyright world_bank_data"
+
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "basic"

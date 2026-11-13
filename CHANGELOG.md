@@ -1,6 +1,9 @@
 0.2.0.dev0 (unreleased)
 -----------------------
 
+**Added**
+- Add type annotations for the public API and run Pyright in development and CI.
+
 **Changed**
 - Require Python 3.10 or later and test Python 3.10 through 3.15.
 - Modernize the development environment, CI checks, and trusted PyPI publishing.

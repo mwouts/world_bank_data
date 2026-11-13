@@ -2,4 +2,4 @@
 
 language = "en"
 id_or_value = "value"
-proxies = None
+proxies: dict[str, str] | None = None
