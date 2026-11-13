@@ -157,6 +157,7 @@ Install [Pixi](https://pixi.sh/) and run:
 ```bash
 pixi install --locked
 pixi run lint
+pixi run typecheck
 pixi run test
 pixi run build
 ```

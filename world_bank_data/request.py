@@ -4,6 +4,7 @@
 import json
 import re
 from copy import copy
+from typing import Any
 
 import pandas as pd
 from cachetools import TTLCache, cached, keys
@@ -18,7 +19,7 @@ class WBRequestError(HTTPError):
     """An error occured when downloading the WB data"""
 
 
-def collapse(values):
+def collapse(values: Any) -> str:
     """Collapse multiple values to a colon-separated list of values"""
     if isinstance(values, str):
         return values
@@ -29,7 +30,7 @@ def collapse(values):
     return str(values)
 
 
-def extract_preferred_field(data, id_or_value):
+def extract_preferred_field(data: Any, id_or_value: str | None) -> Any:
     """In case the preferred representation of data when the latter has multiple representations"""
     if not id_or_value:
         return data
@@ -47,7 +48,7 @@ def extract_preferred_field(data, id_or_value):
     return data
 
 
-def wb_get(*args, **kwargs):
+def wb_get(*args: Any, **kwargs: Any) -> Any:
     """Request the World Bank for the desired information"""
     params = copy(kwargs)
     language = params.pop("language", "en")
@@ -56,17 +57,17 @@ def wb_get(*args, **kwargs):
     params.setdefault("per_page", 20000)
 
     # collapse the list of countries to a single str
-    args = list(args)
-    if len(args) > 1:
-        args[1] = collapse(args[1])
+    path = list(args)
+    if len(path) > 1:
+        path[1] = collapse(path[1])
 
     if "topic" in params:
-        args = ["topic", str(params.pop("topic"))] + args
+        path = ["topic", str(params.pop("topic"))] + path
 
     if language != "en":
-        args = [language] + args
+        path = [language] + path
 
-    url = "/".join([WORLD_BANK_URL] + args)
+    url = "/".join([WORLD_BANK_URL] + path)
 
     response = get(url=url, params=params, proxies=proxies)
     response.raise_for_status()
@@ -110,7 +111,7 @@ def wb_get(*args, **kwargs):
     return data
 
 
-def _extract_message(msg):
+def _extract_message(msg: str) -> str:
     """'ï»¿<?xml version="1.0" encoding="utf-8"?>
     <wb:error xmlns:wb="http://www.worldbank.org">
       <wb:message id="175" key="Invalid format">The indicator was not found. It may have been deleted or archived.</wb:message>
@@ -145,7 +146,7 @@ def _wb_get_table_cached(name, only=None, language=None, id_or_value=None, **par
 
     table = pd.DataFrame(table, columns=columns)
 
-    if table["id"].any():
+    if bool(table["id"].any()):
         return table.set_index("id")
 
     table.pop("id")
