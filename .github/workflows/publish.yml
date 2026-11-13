@@ -9,7 +9,7 @@ permissions:
   contents: read
 jobs:
   checks:
-    uses: ./.github/workflows/continuous-integration.yml
+    uses: $/.github/workflows/continuous-integration.yml
     permissions:
       contents: read
       security-events: write
