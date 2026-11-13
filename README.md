@@ -1,6 +1,6 @@
 # The World Bank Data in Python
 
-[![CI](https://github.com/mwouts/world_bank_data/actions/workflows/continuous-integration.yml/badge.svg?branch=main)](https://github.com/mwouts/world_bank_data/actions)
+[![CI](https://github.com/mwouts/world_bank_data/actions/workflows/python-ci.yml/badge.svg?branch=main)](https://github.com/mwouts/world_bank_data/actions)
 [![codecov.io](https://codecov.io/github/mwouts/world_bank_data/coverage.svg?branch=main)](https://codecov.io/github/mwouts/world_bank_data?branch=main)
 [![Pypi](https://img.shields.io/pypi/v/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
 [![pyversions](https://img.shields.io/pypi/pyversions/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
