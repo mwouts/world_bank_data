@@ -5,9 +5,43 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
       - "v[0-9]+.[0-9]+.[0-9]+rc[0-9]+"
       - "v[0-9]+.[0-9]+.[0-9]+dev[0-9]+"
-
+permissions:
+  contents: read
 jobs:
+  checks:
+    uses: $/.github/workflows/continuous-integration.yml
+    permissions:
+      contents: read
+      security-events: write
+  build:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install build twine
+      - name: Verify tag matches package version
+        run: |
+          python -c 'import os, runpy; assert os.environ["GITHUB_REF_NAME"] == "v" + runpy.run_path("world_bank_data/version.py")["__version__"]'
+      - run: python -m build && python -m twine check dist/*
+      - name: Smoke test wheel and source distribution
+        run: |
+          for package in dist/*.whl dist/*.tar.gz; do
+            python -m venv /tmp/package-test
+            /tmp/package-test/bin/pip install "$package"
+            (cd /tmp && /tmp/package-test/bin/python -c 'import world_bank_data; print(world_bank_data.__version__)')
+            rm -rf /tmp/package-test
+          done
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: distributions
+          path: dist/
   publish:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -15,17 +49,8 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          python-version: 3.11
-      - name: Build package
-        run: |
-          python -m pip install wheel build
-          python -m build
-      - name: Publish
-        uses: pypa/gh-action-pypi-publish@release/v1
+          name: distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3

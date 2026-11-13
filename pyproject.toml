@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "world-bank-data"
 dynamic = ["version"]
 description = "World Bank Data API in Python"
+requires-python = ">=3.10"
 readme = "README.md"
 license = "MIT"
 authors = [
@@ -20,12 +21,12 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
 ]
 dependencies = [
     "cachetools",
@@ -34,6 +35,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "jupytext", "plotly", "build"]
+
 test = [
   # Pytest
   "pytest",
@@ -63,3 +66,22 @@ exclude_lines = [
     "raise NotImplementedError",
     "except ImportError",
   ]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
+
+[tool.pixi.dependencies]
+python = ">=3.10"
+ipykernel = "*"
+jupyterlab = "*"
+pre-commit = "*"
+pip = ">=26.2.2,<27"
+
+[tool.pixi.pypi-dependencies]
+world-bank-data = { path = ".", editable = true, extras = ["dev"] }
+
+[tool.pixi.tasks]
+test = "pytest tests"
+lint = "pre-commit run --all-files"
+build = "python -m build"

@@ -21,7 +21,7 @@ def test_country_language():
     cnt = get_countries(["FRA"], language="fr")
     assert cnt.index == ["FRA"]
     assert_numeric_or_string(cnt)
-    assert cnt.region[0] == "Europe et Asie centrale"
+    assert cnt.region.iloc[0] == "Europe et Asie centrale"
 
 
 def test_two_countries():

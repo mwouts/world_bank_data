@@ -1,0 +1,45 @@
+{
+  "name": "world_bank_data development",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    "options": [
+      "--platform=linux/amd64"
+    ]
+  },
+  "runArgs": [
+    "--platform=linux/amd64"
+  ],
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=${devcontainerId}-pixi,target=${containerWorkspaceFolder}/.pixi,type=volume"
+  ],
+  "postCreateCommand": "sudo chown vscode:vscode .pixi && pixi install --locked && pixi run python -m ipykernel install --name world_bank_data --user",
+  "waitFor": "postCreateCommand",
+  "remoteEnv": {
+    "PATH": "${containerWorkspaceFolder}/.pixi/envs/default/bin:${containerEnv:PATH}"
+  },
+  "forwardPorts": [
+    8888
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-pyright.pyright",
+        "charliermarsh.ruff",
+        "ms-toolsai.jupyter",
+        "openai.chatgpt",
+        "caenrigen.jupytext-sync",
+        "renan-r-santos.pixi-code"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "${workspaceFolder}/.pixi/envs/default/bin/python",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": [
+          "tests"
+        ]
+      }
+    }
+  }
+}

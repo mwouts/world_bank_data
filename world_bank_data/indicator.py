@@ -25,7 +25,7 @@ def get_indicators(indicator=None, language=None, id_or_value=None, **params):
         language=language,
         id_or_value=id_or_value,
         expected=["id", "value"],
-        **params
+        **params,
     )
 
 
