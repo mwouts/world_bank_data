@@ -6,3 +6,5 @@
 *.pyc
 build/
 dist/
+
+.pixi/

@@ -34,6 +34,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "jupytext", "plotly", "build"]
+
 test = [
   # Pytest
   "pytest",
@@ -63,3 +65,16 @@ exclude_lines = [
     "raise NotImplementedError",
     "except ImportError",
   ]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
+
+[tool.pixi.dependencies]
+python = ">=3.10"
+ipykernel = "*"
+jupyterlab = "*"
+pre-commit = "*"
+
+[tool.pixi.pypi-dependencies]
+world-bank-data = { path = ".", editable = true, extras = ["dev"] }
