@@ -1,6 +1,7 @@
 # The World Bank Data in Python
 
 [![CI](https://github.com/mwouts/world_bank_data/actions/workflows/continuous-integration.yml/badge.svg?branch=main)](https://github.com/mwouts/world_bank_data/actions)
+[![codecov.io](https://codecov.io/github/mwouts/world_bank_data/coverage.svg?branch=main)](https://codecov.io/github/mwouts/world_bank_data?branch=main)
 [![Pypi](https://img.shields.io/pypi/v/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
 [![pyversions](https://img.shields.io/pypi/pyversions/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
 [![JupyterLab](https://img.shields.io/badge/Binder-JupyterLab-blue.svg)](https://mybinder.org/v2/gh/mwouts/world_bank_data/main?urlpath=lab)
@@ -11,7 +12,7 @@ This is an implementation of the [World Bank API v2](https://datahelpdesk.worldb
 
 ## Installation
 
-Python 3.10 or later is required. Install or update the _World Bank Data_ python package with
+Install or update the _World Bank Data_ python package with
 
 ```bash
 pip install world_bank_data --upgrade
