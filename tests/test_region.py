@@ -14,7 +14,7 @@ def test_one_region():
 
 def test_region_language():
     reg = get_regions(["ECS"], language="fr")
-    assert reg.name[0] == "Europe et Asie centrale"
+    assert reg.name.iloc[0] == "Europe et Asie centrale"
 
 
 def test_one_region_list():

@@ -1,7 +1,6 @@
 # The World Bank Data in Python
 
 [![CI](https://github.com/mwouts/world_bank_data/actions/workflows/continuous-integration.yml/badge.svg?branch=main)](https://github.com/mwouts/world_bank_data/actions)
-[![codecov.io](https://codecov.io/github/mwouts/world_bank_data/coverage.svg?branch=main)](https://codecov.io/github/mwouts/world_bank_data?branch=main)
 [![Pypi](https://img.shields.io/pypi/v/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
 [![pyversions](https://img.shields.io/pypi/pyversions/world_bank_data.svg)](https://pypi.python.org/pypi/world_bank_data)
 [![JupyterLab](https://img.shields.io/badge/Binder-JupyterLab-blue.svg)](https://mybinder.org/v2/gh/mwouts/world_bank_data/main?urlpath=lab)
@@ -12,7 +11,7 @@ This is an implementation of the [World Bank API v2](https://datahelpdesk.worldb
 
 ## Installation
 
-Install or update the _World Bank Data_ python package with
+Python 3.10 or later is required. Install or update the _World Bank Data_ python package with
 
 ```bash
 pip install world_bank_data --upgrade
@@ -148,6 +147,17 @@ Using the package behind an http proxy is possible. Use either the `proxies` arg
 
 ```python
 wb.options.proxies = {'http': 'http://example.com:3128'}
+```
+
+# Development
+
+Install [Pixi](https://pixi.sh/) and run:
+
+```bash
+pixi install --locked
+pixi run lint
+pixi run test
+pixi run build
 ```
 
 ## License

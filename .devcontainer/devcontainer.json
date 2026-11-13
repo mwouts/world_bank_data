@@ -14,7 +14,7 @@
   "mounts": [
     "source=${devcontainerId}-pixi,target=${containerWorkspaceFolder}/.pixi,type=volume"
   ],
-  "postCreateCommand": "sudo chown vscode:vscode .pixi && pixi install && pixi run python -m ipykernel install --name world_bank_data --user",
+  "postCreateCommand": "sudo chown vscode:vscode .pixi && pixi install --locked && pixi run python -m ipykernel install --name world_bank_data --user",
   "waitFor": "postCreateCommand",
   "remoteEnv": {
     "PATH": "${containerWorkspaceFolder}/.pixi/envs/default/bin:${containerEnv:PATH}"
@@ -29,7 +29,9 @@
         "ms-pyright.pyright",
         "charliermarsh.ruff",
         "ms-toolsai.jupyter",
-        "openai.chatgpt"
+        "openai.chatgpt",
+        "caenrigen.jupytext-sync",
+        "renan-r-santos.pixi-code"
       ],
       "settings": {
         "python.defaultInterpreterPath": "${workspaceFolder}/.pixi/envs/default/bin/python",

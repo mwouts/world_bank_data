@@ -56,8 +56,8 @@ def wb_get(*args, **kwargs):
     params.setdefault("per_page", 20000)
 
     # collapse the list of countries to a single str
+    args = list(args)
     if len(args) > 1:
-        args = list(args)
         args[1] = collapse(args[1])
 
     if "topic" in params:
@@ -82,7 +82,7 @@ def wb_get(*args, **kwargs):
         try:
             msg = data[0]["message"][0]["value"]
         except (KeyError, IndexError):
-            msg = str(msg)
+            msg = str(data[0])
 
         raise ValueError(
             "{msg}\nurl={url}\nparams={params}".format(msg=msg, url=url, params=params)
@@ -95,7 +95,7 @@ def wb_get(*args, **kwargs):
             current_page = 1
             while current_page < int(page_information["pages"]):
                 params["page"] = current_page = int(page_information["page"]) + 1
-                response = get(url=url, params=params)
+                response = get(url=url, params=params, proxies=proxies)
                 response.raise_for_status()
                 page_information, new_data = response.json()
                 data.extend(new_data)

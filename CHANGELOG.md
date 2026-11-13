@@ -1,3 +1,17 @@
+0.2.0.dev0 (unreleased)
+-----------------------
+
+**Changed**
+- Require Python 3.10 or later and test Python 3.10 through 3.15.
+- Modernize the development environment, CI checks, and trusted PyPI publishing.
+
+**Fixed**
+- Preserve proxy settings when fetching additional pages from the World Bank API.
+- Allow requests with a single path component.
+- Update tests for current pandas versions and changing World Bank data.
+- Avoid network requests during test discovery in VS Code.
+
+
 0.1.4 (2024-09-28)
 ------------------
 

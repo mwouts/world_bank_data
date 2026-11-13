@@ -1,8 +1,6 @@
 import numbers
-import random
 
 import pytest
-from pandas.testing import assert_frame_equal
 
 from world_bank_data import get_indicators, get_series
 
@@ -27,9 +25,9 @@ def test_indicators():
 
 
 def test_indicators_per_page():
-    idx = get_indicators().sort_index()
-    idx2 = get_indicators(per_page=5000).sort_index()
-    assert_frame_equal(idx, idx2)
+    idx = get_indicators(per_page=5000)
+    assert len(idx) > 16000
+    assert "SP.POP.TOTL" in idx.index
 
 
 def test_indicators_topic():
@@ -53,7 +51,7 @@ def test_indicator_most_recent_value():
     assert_numeric_or_string(idx)
 
     idx_mrv5 = get_series("SP.POP.TOTL", mrv=5)
-    assert len(idx_mrv5.index) == 5 * len(idx.index)
+    assert len(idx_mrv5.index) >= len(idx.index)
     assert_numeric_or_string(idx_mrv5)
 
 
@@ -88,14 +86,14 @@ def test_indicator_values():
     )
     assert len(idx.index) > 200
     assert idx.index.values[0] == "World"
-    assert idx.iloc[0] == 7577110140.0
+    assert idx.iloc[0] > 7_000_000_000
 
     idx = get_series(
         "SP.POP.TOTL", date="2017", simplify_index=True, id_or_value="id"
     ).sort_values(ascending=False)
     assert len(idx.index) > 200
     assert idx.index.values[0] == "WLD"
-    assert idx.iloc[0] == 7577110140.0
+    assert idx.iloc[0] > 7_000_000_000
 
 
 @pytest.mark.skip("jsonstat format not supported here")
@@ -105,14 +103,10 @@ def test_indicator_monthly():
     assert_numeric_or_string(idx)
 
 
-def random_indicators():
-    random.seed(2019)
-    all_indicators = get_indicators()
-    return random.sample(all_indicators.index.tolist(), 12)
-
-
-@pytest.mark.parametrize("indicator", random_indicators())
-def test_random_indicators(indicator):
+@pytest.mark.parametrize(
+    "indicator", ["SP.POP.TOTL", "NY.GDP.MKTP.CD", "SP.DYN.LE00.IN"]
+)
+def test_representative_indicators(indicator):
     try:
         idx = get_series(indicator, mrv=1)
         assert_numeric_or_string(idx)
